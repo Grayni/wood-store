@@ -1,0 +1,15 @@
+[
+  {
+    "value": "in_availability",
+    "label": "В наличии"
+  }, {
+    "value": "sub_order",
+    "label": "Под заказ"
+  }, {
+    "value": "not_availability",
+    "label": "Нет в наличии"
+  }, {
+    "value": "few",
+    "label": "Мало"
+  }
+]

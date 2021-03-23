@@ -1,0 +1,85 @@
+h1, h2, h3, label, li, span, a, div, input
+  font-family 'Circe'
+  font-weight 600
+
+.mb
+  margin-bottom 1.5rem
+
+.el-icon-plus:before
+  content "\e6d9"
+
+.el-tabs__new-tab .el-icon-plus
+  transform scale(.8, .8)\
+
+.admin-title
+  margin-bottom 20px
+  font 600 22px Circe
+
+.redact-create
+  max-width 600px
+
+.button-wrap
+  display flex
+  justify-content flex-start
+  align-items flex-start
+  width 100%
+  .el-form-item__content
+    margin-left calc(100% - 160px)
+
+.el-page-header
+  &__content
+    color #606266
+.header-page
+  margin-bottom 20px
+
+.el-form-item
+  .el-select
+    width 100%
+  &:before, &:after
+    display table
+    content ''
+  &:after
+    clear both
+  &__label
+    float left
+    width 160px
+    text-align right
+    vertical-align middle
+  &__content
+    position relative
+    margin-left 160px
+    &:before, &:after
+      display table
+      content ''
+
+.el-page-header__title
+  line-height 27px
+
+.el-icon-back
+  position relative
+  top -3px
+
+.el-checkbox
+  margin-right 10px
+  position relative
+  top 1px
+
+.active-label
+  color #c9c4d1
+
+.pr5
+  padding-right 5px
+
+.link
+  color #409EFF
+  text-decoration none
+  &:hover
+    color #66b1ff
+.tag
+  margin-right 5px
+
+.admin-enter-active, .admin-leave-active
+  transition opacity 0.5s
+
+.admin-enter, .admin-leave-active
+  opacity 0
