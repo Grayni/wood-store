@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import {statusLabel} from '@/plugins/mixins/statusLabel.mixin'
+import {statusLabel} from '@/plugins/mixins/statusLabel'
 
 export default {
   name: 'users-page',

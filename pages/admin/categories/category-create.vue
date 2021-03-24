@@ -39,8 +39,8 @@
 </template>
 
 <script>
-  import {validateForm} from '@/plugins/mixins/validateForm.mixin'
-  import {transliter} from '@/plugins/mixins/transliter.mixin'
+  import {validateForm} from '@/plugins/mixins/validateForm'
+  import {transliter} from '@/plugins/mixins/transliter'
 
   export default {
     name: 'category-create-page',

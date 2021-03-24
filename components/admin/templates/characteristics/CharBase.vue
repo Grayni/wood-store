@@ -43,8 +43,6 @@
     },
     created() {
       this.fetchNames()
-    },
-    mounted() {
     }
   }
 </script>
@@ -59,6 +57,7 @@
         color #409EFF
     .link-item
       margin-bottom 18px
+      font-size 14px
     .delete-char
       font-size 25px
       line-height 0

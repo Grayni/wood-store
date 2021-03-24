@@ -99,8 +99,8 @@
 </template>
 
 <script>
-  import {validateForm} from '@/plugins/mixins/validateForm.mixin'
-  import {transliter} from '@/plugins/mixins/transliter.mixin'
+  import {validateForm} from '@/plugins/mixins/validateForm'
+  import {transliter} from '@/plugins/mixins/transliter'
 
   import availabilityList from '@/storage/availability'
   import productDisplay from '@/storage/productDisplay'

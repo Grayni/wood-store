@@ -10,7 +10,12 @@ export const state = () => ({
     values: [],
     status: false
   },
-  backupChar: {},
+  backupChar: {
+    title: '',
+    identifier: '',
+    values: [],
+    status: false
+  },
   validate: null
 })
 
@@ -21,7 +26,8 @@ export const actions = {
 
   async createCharacter({commit}, data) {
     try {
-      return await this.$axios.$post('/api/characteristics/admin/characteristic-create', data)
+      const message = await this.$axios.$post('/api/characteristics/admin/characteristic-create', data)
+      return message
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
@@ -41,7 +47,8 @@ export const actions = {
   async deleteCharacter({commit}, identifier) {
     try {
       commit('deleteLocalCharacter', identifier)
-      return await this.$axios.$delete(`/api/characteristics/admin/${identifier}`)
+      const message = await this.$axios.$delete(`/api/characteristics/admin/${identifier}`)
+      return message
     } catch(e) {
       commit('setError', e, {root: true})
       throw e
@@ -90,15 +97,18 @@ export const actions = {
     commit('updateLocalTitle', title)
   },
 
+  updateLocalIdentifier({commit}, identifier) {
+    commit('updateLocalIdentefier', identifier)
+  },
+
   changeLocalStatus({commit}, status) {
     commit('changeLocalStatus', status)
   },
 
-  async addValue({commit}, {value, identifier}) {
+  addLocalValue({commit}, value) {
     try {
-      const response = await this.$axios.$put(`/api/characteristics/admin/new-value/${identifier}`, {value})
       commit('addLocalValue', value)
-      return response
+      return
     } catch(e) {
       commit('setError', e, {root: true})
       throw e
@@ -108,6 +118,7 @@ export const actions = {
   async deleteValue({store, commit}, {index, value, identifier}) {
     try {
       const response = await this.$axios.$put(`/api/characteristics/admin/value/${identifier}`, {value})
+
       commit('deleteLocalValue', index)
       return response
     } catch(e) {
@@ -135,11 +146,15 @@ export const mutations = {
   // start update characteristic form
 
   updateLocalTitle(state, title) {
-    state.characteristic.title = title
+    state.characteristic.title = title.toLowerCase()
+  },
+
+  updateLocalIdentefier(state, identifier) {
+    state.characteristic.identifier = identifier.toLowerCase()
   },
 
   addLocalValue(state, value) {
-    state.characteristic.values.push(value)
+    state.characteristic.values.push(value.toLowerCase())
   },
 
   changeLocalStatus(state, status) {
@@ -148,6 +163,7 @@ export const mutations = {
 
   deleteLocalValue(state, index) {
     state.characteristic.values.splice(index, 1)
+    state.backupChar.values.splice(index, 1)
   },
 
   // end update characteristic form
@@ -165,9 +181,6 @@ export const mutations = {
     state.characteristic = response
     state.backupChar = resFrozen
   },
-  // assignTwo(state, char) {
-  //   state.backupChar = {...char} 
-  // },
   clearChar(state) {
     state.characteristic = stateInitial
   },

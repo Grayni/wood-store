@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {setError} from '@/plugins/mixins/setError.mixin'
+import {setError} from '@/plugins/mixins/setError'
 export default {
   mixins: [setError]
 }

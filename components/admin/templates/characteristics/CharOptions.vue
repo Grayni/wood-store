@@ -2,9 +2,9 @@
   .char-options
     h2.decorate Свойства характеристики:
     transition-group(name="list" tag="div" :class="'list-values'")
-      div.tag(v-for="(value, i) in characteristic.values" :key="value")
+      .tags-wrap(v-for="(value, i) in characteristic.values" :key="value+1")
         el-tag(:type="backupChar.values.includes(characteristic.values[i]) ? '' : 'success'")
-          span {{value}}
+          span.tag-name {{value}}
           el-button.times(type="text" @click="addNotifyDelete(i, value, characteristic.values)") &times;
 
 </template>
@@ -13,11 +13,6 @@
   import {mapGetters, mapActions} from 'vuex'
   export default {
     name: 'char-options',
-    data() {
-      return {
-        lengthInitialValues: 0
-      }
-    },
     computed: {
       ...mapGetters('characteristics', ['characteristic', 'backupChar'])
     },
@@ -26,19 +21,16 @@
 
       async addNotifyDelete(index, value) {
         const formData = {
-          index, value, identifier: this.$route.params.identifier
+          index,
+          value,
+          identifier: this.$route.params.identifier
         }
-
-        console.log(formData)
 
         const message = await this.deleteValue(formData)
 
         this.$notify({type: 'info', message})
       }
 
-    },
-    beforeUpdate() {
-      this.backupChar
     },
     beforeDestroy() {
       this.returnOriginal()
@@ -65,11 +57,27 @@
     .times
       padding 0
       span
-        font-size 25px
-        margin 0 0 0 3px
-        top 5px
+        font-size 26px
         padding 0
+        margin-left 3px
         position relative
+        top 4px
+        color white
+        text-shadow 0 0 2px #0a7efc
+        transition all .2s ease
+        &:hover
+          color #0a7efc
+          text-shadow none
+          transition all .2s ease
+    .tag-name
+      position relative
+      top -2px
+      font-size 14px
+    .list-values
+      display flex
+      flex-wrap wrap
+      .tags-wrap
+        margin-bottom 5px
 
     .list-enter-active, .list-leave-active
       max-height 20px
@@ -80,9 +88,4 @@
       transform translateX(30px)
       transition all .4s
 
-    .list-values
-      display flex
-      flex-wrap wrap
-      .tag
-        margin-bottom 5px
 </style>

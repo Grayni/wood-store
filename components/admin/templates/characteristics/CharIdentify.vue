@@ -2,11 +2,11 @@
   .char-identify
     h2.decorate {{title}}
 
-    el-form-item(label="Название" prop="title" ref="test")
+    el-form-item(label="Название" prop="title")
       el-input(:value="characteristic.title" @input="updateLocalTitle($event)")
 
-    el-form-item(label="Идентификатор")
-      el-input( v-model="characteristic.identifier" disabled)
+    el-form-item(label="Идентификатор" v-bind:prop="isDisable ? '' : 'identifier'")
+      el-input(:value="characteristic.identifier" @input="updateLocalIdentifier($event)" :disabled="isDisable")
 
     el-form-item(label="Добавить значение")
       .values-box
@@ -17,74 +17,79 @@
       el-switch(v-model="status" @change="changeLocalStatus(status)" active-text="Видно" inactive-text="Скрыто")
 
     .button-wrap
-      el-button(type="primary" native-type="submit" :loading="loading")
-        span Cохранить изменения
+      el-button.button-active(:class="{'button-active-save': buttonActiveSave}" type="primary" native-type="submit" :loading="loading")
+        span {{nameButton}}
 
 </template>
 
 <script>
-  import {mapGetters, mapActions, mapState} from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+  import {notifyWarn} from '~/plugins/mixins/functions/characteristicParams'
   export default {
     name: 'char-identify',
     props: {
-      title: { type: String },
-      loading: { type: Boolean },
-      warning: { type: Object}
+      title: String,
+      loading: Boolean,
+      warning: Object,
+      isDisable: Boolean,
+      nameButton: String
     },
+    mixins: [notifyWarn],
     data() {
       return {
         value: '',
-        status: false,
-        isCheck: {
-          title: true,
-          value: true
-        }
+        status: false
       }
     },
     computed: {
-      ...mapGetters('characteristics', ['characteristic', 'validate'])
-    },
-    methods: {
-      ...mapActions('characteristics', ['fetchCharOne', 'updateLocalTitle', 'addValue', 'changeLocalStatus']),
-
-      notifyRedact(message) {
-        this.warning.message = message
-        this.$notify(this.warning)
+      buttonActiveSave () {
+        if (this.$route.params.identifier) {
+          return JSON.stringify(this.characteristic) !== JSON.stringify(this.backupChar)
+        }
       },
 
+      ...mapGetters('characteristics', ['characteristic', 'validate', 'backupChar'])
+    },
+    methods: {
+      ...mapActions('characteristics', [
+        'fetchCharOne',
+        'updateLocalTitle',
+        'addLocalValue',
+        'changeLocalStatus',
+        'updateLocalIdentifier'
+      ]),
+
+      // notifyRedact(message) {
+      //   this.warning.message = message
+      //   this.$notify(this.warning)
+      // },
+
       expandValues(val) {
-        this.validate(async valid => {
-          if (!valid) {
-            this.notifyRedact('Заполните все поля')
-          } else if (!val.length) {
-            this.notifyRedact('Добавьте значение')
-          } else {
-            val = val.toLowerCase()
+        this.validate(valid => {
+          if (!valid) this.mixNotifyWarn('Заполните все поля') //this.notifyRedact('Заполните все поля')
+          else if (!val.length) this.mixNotifyWarn('Добавьте значение') //this.notifyRedact('Добавьте значение')
+          else {
             if (!this.characteristic.values.includes(val)) {
 
               const notify = {
-                title: 'Добавлено!',
+                title: 'Сохранитесь!',
                 dangerouslyUseHTMLString: true,
                 message: `<span class="notify">${val}</span> &rArr; </span><span class="notify">${this.characteristic.title}</span>`
               }
 
-              const formData = {
-                value: val, identifier: this.$route.params.identifier
-              }
-
-              this.addLocalValue(formData)
+              this.addLocalValue(val)
               this.$notify.success(notify)
               this.value = ''
 
             } else {
-              this.notifyRedact(`Значение <span class="notify">${val}</span> уже существует`)
+              this.mixNotifyWarn(`Значение <span class="notify">${val}</span> уже существует`)
             }
 
           }
         })
       }
     },
-    created() {
+    beforeUpdate() {
       this.status = this.characteristic.status
     }
   }
@@ -97,4 +102,16 @@
     .values-box
       display grid
       grid-template-columns 6fr 1fr
+    .button-active
+      &-save
+        animation: blink 2s infinite alternate
+
+  @keyframes blink
+    from
+      background-color #409EFF
+      box-shadow 1px 1px 1px #409EFF
+    to
+      background-color rgba(64, 158, 255, .6)
+      box-shadow 1px 1px 5px rgba(64, 158, 255, 0), inset 1px 1px 1px white
+      border-color white
 </style>

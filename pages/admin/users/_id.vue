@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import { validateForm } from '@/plugins/mixins/validateForm.mixin';
-import { setError } from '@/plugins/mixins/setError.mixin';
-import { statusLabel } from '@/plugins/mixins/statusLabel.mixin';
+import { validateForm } from '@/plugins/mixins/validateForm';
+import { setError } from '@/plugins/mixins/setError';
+import { statusLabel } from '@/plugins/mixins/statusLabel';
 
 export default {
   name: 'users-page',

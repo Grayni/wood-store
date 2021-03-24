@@ -332,9 +332,7 @@ export const validateForm = {
         ],
         identifier: [
           {
-            required: true,
-            message: 'id-name обязателен',
-            trigger: 'blur'
+            required: true, message: 'id-name обязателен', trigger: 'blur'
           },
           {
             required: true,
@@ -360,9 +358,3 @@ export const validateForm = {
     }
   }
 }
-
-// export const validateId = {
-//   validate({ params }) {
-//     return Boolean(params.id)
-//   }
-// }

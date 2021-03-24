@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import {validateForm} from '@/plugins/mixins/validateForm.mixin'
+  import {validateForm} from '@/plugins/mixins/validateForm'
   export default {
     name: 'category_redact',
     layout: 'admin',
