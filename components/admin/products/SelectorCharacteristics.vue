@@ -44,7 +44,7 @@
       }
     },
     async created() {
-      this.fetchCharsAll()
+      await this.fetchCharsAll()
     }
   }
 </script>

@@ -82,7 +82,7 @@
             this.loading = true
 
             try {
-              const message = await this.$store.dispatch('categories/createCategory', this.controls)
+              const message = await this.$store.dispatch('categories/create', this.controls)
               this.$message({message, center: true})
 
               // return initial data

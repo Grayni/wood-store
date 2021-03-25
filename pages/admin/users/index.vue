@@ -72,7 +72,7 @@
               circle
               @click="remove(row._id, row.status)"
             )
-    app-add(:urls="'/admin/users/user-create'" :title="'Создать пользователя'")
+    add(:urls="'/admin/users/user-create'" :title="'Создать пользователя'")
 </template>
 
 <script>

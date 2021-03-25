@@ -10,14 +10,15 @@
 </template>
 
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
   export default {
     name: 'char-options',
     computed: {
       ...mapGetters('characteristics', ['characteristic', 'backupChar'])
     },
     methods: {
-      ...mapActions('characteristics', ['deleteValue', 'returnOriginal']),
+      ...mapActions('characteristics', ['deleteValue']),
+      ...mapMutations('characteristics', ['clearChar']),
 
       async addNotifyDelete(index, value) {
         const formData = {
@@ -33,7 +34,7 @@
 
     },
     beforeDestroy() {
-      this.returnOriginal()
+      this.clearChar()
     }
   }
 </script>
@@ -87,5 +88,4 @@
       max-height 0px
       transform translateX(30px)
       transition all .4s
-
 </style>

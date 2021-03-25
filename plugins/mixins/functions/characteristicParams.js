@@ -1,9 +1,8 @@
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions, mapMutations} from 'vuex'
 
 export const characteristicParams = {
   data() {
     return {
-      loading: false,
       referal: 'change-char'
     }
   },
@@ -11,7 +10,8 @@ export const characteristicParams = {
     ...mapGetters('characteristics', ['characteristic', 'backupChar'])
   },
   methods: {
-    ...mapActions('characteristics', ['writeValidate', 'fetchNames', 'createCharacter', 'returnOriginal']),
+    ...mapActions('characteristics', ['fetchNames', 'createCharacter', 'returnOriginal']),
+    ...mapMutations('characteristics', ['writeValidate']),
 
     mixOnSubmit(nameForm) {
       this.$refs[nameForm].validate(async valid => {
@@ -28,7 +28,7 @@ export const characteristicParams = {
 
               if (this.$route.params.identifier) {
                 message = await this.updateCharacter(formData) ?? 'Что-то не так' // update backupChar
-                this.fetchCharOne(this.$route.params.identifier)
+                await this.fetchCharOne(this.$route.params.identifier)
               } else {
                 message = await this.createCharacter(formData) ?? 'Что-то не так'
 

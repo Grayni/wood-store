@@ -91,34 +91,9 @@ export const actions = {
     }
   },
 
-  // start update form characteristic
-
-  updateLocalTitle({commit}, title) {
-    commit('updateLocalTitle', title)
-  },
-
-  updateLocalIdentifier({commit}, identifier) {
-    commit('updateLocalIdentefier', identifier)
-  },
-
-  changeLocalStatus({commit}, status) {
-    commit('changeLocalStatus', status)
-  },
-
-  addLocalValue({commit}, value) {
-    try {
-      commit('addLocalValue', value)
-      return
-    } catch(e) {
-      commit('setError', e, {root: true})
-      throw e
-    }
-  },
-
   async deleteValue({store, commit}, {index, value, identifier}) {
     try {
       const response = await this.$axios.$put(`/api/characteristics/admin/value/${identifier}`, {value})
-
       commit('deleteLocalValue', index)
       return response
     } catch(e) {
@@ -127,16 +102,6 @@ export const actions = {
     }
   },
 
-  // end update characteristic
-
-
-  returnOriginal({commit}) {
-    commit('clearChar')
-  },
-
-  writeValidate({commit}, validate) {
-    commit('writeValidate', validate)
-  }
 }
 
 
@@ -147,10 +112,6 @@ export const mutations = {
 
   updateLocalTitle(state, title) {
     state.characteristic.title = title.toLowerCase()
-  },
-
-  updateLocalIdentefier(state, identifier) {
-    state.characteristic.identifier = identifier.toLowerCase()
   },
 
   addLocalValue(state, value) {

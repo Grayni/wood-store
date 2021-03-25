@@ -6,11 +6,16 @@ const categoriesSchema = new Schema({
     lowercase: true,
     required: true
   },
-  tag: {
+  identifier: {
     type: String,
     lowercase: true,
     required: true,
     unique: true
+  },
+  tag: {
+    type: String,
+    lowercase: true,
+    required: true
   },
   parent: {
     label: {

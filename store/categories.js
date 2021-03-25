@@ -1,11 +1,15 @@
 export const state = () => ({
-  subcategories: []
+  categories: [],
+  subcategories: [],
+  
 })
 
 export const actions = {
-  async fetchCategoriesList({commit}) {
+  async fetchList({commit}) {
     try {
-      return await this.$axios.$get('/api/categories/admin/categories-list')
+      const response = await this.$axios.$get('/api/categories/admin/categories-list')
+      commit('fetchList', response)
+      return response
     } catch (e) {
       commit('setError', e , {root: true})
       throw e
@@ -21,7 +25,7 @@ export const actions = {
     }
   },
 
-  async createCategory({commit}, formData) {
+  async create({commit}, formData) {
     try {
       return await this.$axios.$post('/api/categories/admin/create-category', formData)
     } catch (e) {
@@ -57,18 +61,22 @@ export const actions = {
     }
   },
 
-  async deleteCategory({commit}, {tag}) {
+  async delete({commit}, {tag}) {
     try {
-      return await this.$axios.$delete(`/api/categories/admin/${tag}`)
+      const response = await this.$axios.$delete(`/api/categories/admin/${tag}`)
+      commit('delete', tag)
+      return response
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
-  async saveStatus({commit}, {tag, status}) {
-    try {
-      return await this.$axios.$put(`/api/categories/admin/status/${tag}`, {status})
+  async changeStatus({commit}, {tag, status}) {
+    try { 
+      const response = await this.$axios.$put(`/api/categories/admin/status/${tag}`, {status})
+      commit('changeStatus', {tag, status})
+      return response
     } catch(e) {
       commit('setError', e, {root: true})
       throw e
@@ -96,12 +104,28 @@ export const actions = {
 }
 
 export const mutations = {
+  fetchList(state, categories) {
+    state.categories = categories
+  },
+
+  changeStatus(state, {tag, status}) {
+    state.categories.find(category => category.tag === tag).status = status
+  },
+
+  delete(state, tag) {
+    state.categories = state.categories.filter(v => v.tag !== tag)
+  },
+
   fillSubcategoriesList(state, subcategories) {
     state.subcategories = subcategories
   }
 }
 
 export const getters = {
+  categories(state) {
+    return state.categories
+  },
+
   subcategoriesList(state) {
     return state.subcategories
   }

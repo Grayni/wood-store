@@ -23,13 +23,12 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
   import {notifyWarn} from '~/plugins/mixins/functions/characteristicParams'
   export default {
     name: 'char-identify',
     props: {
       title: String,
-      loading: Boolean,
       warning: Object,
       isDisable: Boolean,
       nameButton: String
@@ -38,6 +37,7 @@
     data() {
       return {
         value: '',
+        loading: false,
         status: false
       }
     },
@@ -51,23 +51,13 @@
       ...mapGetters('characteristics', ['characteristic', 'validate', 'backupChar'])
     },
     methods: {
-      ...mapActions('characteristics', [
-        'fetchCharOne',
-        'updateLocalTitle',
-        'addLocalValue',
-        'changeLocalStatus',
-        'updateLocalIdentifier'
-      ]),
-
-      // notifyRedact(message) {
-      //   this.warning.message = message
-      //   this.$notify(this.warning)
-      // },
+      ...mapActions('characteristics', ['fetchCharOne', 'updateLocalIdentifier']),
+      ...mapMutations('characteristics', ['updateLocalTitle', 'addLocalValue', 'changeLocalStatus']),
 
       expandValues(val) {
         this.validate(valid => {
-          if (!valid) this.mixNotifyWarn('Заполните все поля') //this.notifyRedact('Заполните все поля')
-          else if (!val.length) this.mixNotifyWarn('Добавьте значение') //this.notifyRedact('Добавьте значение')
+          if (!valid) this.mixNotifyWarn('Заполните все поля')
+          else if (!val.length) this.mixNotifyWarn('Добавьте значение')
           else {
             if (!this.characteristic.values.includes(val)) {
 
@@ -105,6 +95,11 @@
     .button-active
       &-save
         animation: blink 2s infinite alternate
+
+    .button-wrap
+      display flex
+      justify-content flex-end
+
 
   @keyframes blink
     from

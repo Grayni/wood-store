@@ -41,8 +41,8 @@
         })
       }
     },
-    created() {
-      this.fetchNames()
+    async created() {
+      await this.fetchNames()
     }
   }
 </script>
