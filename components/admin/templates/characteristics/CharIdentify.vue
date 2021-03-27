@@ -1,9 +1,9 @@
 <template lang="pug">
-  .char-identify
+  .char-identify.col-1
     h2.decorate {{title}}
 
     el-form-item(label="Название" prop="title")
-      el-input(:value="characteristic.title" @input="updateLocalTitle($event)")
+      el-input(:value="characteristic.title" @input="updateLocalTitle")
 
     el-form-item(label="Идентификатор" v-bind:prop="isDisable ? '' : 'identifier'")
       el-input(:value="characteristic.identifier" @input="updateLocalIdentifier($event)" :disabled="isDisable")
@@ -25,6 +25,7 @@
 <script>
   import { mapGetters, mapActions, mapMutations } from 'vuex'
   import {notifyWarn} from '~/plugins/mixins/functions/characteristicParams'
+  import {transliter} from '@/plugins/mixins/transliter'
   export default {
     name: 'char-identify',
     props: {
@@ -33,12 +34,17 @@
       isDisable: Boolean,
       nameButton: String
     },
-    mixins: [notifyWarn],
+    mixins: [notifyWarn, transliter],
     data() {
       return {
         value: '',
         loading: false,
         status: false
+      }
+    },
+    watch: {
+      'characteristic.title'() {
+        this.updateLocalIdentifier(this.translit(this.characteristic.title))
       }
     },
     computed: {
@@ -51,8 +57,8 @@
       ...mapGetters('characteristics', ['characteristic', 'validate', 'backupChar'])
     },
     methods: {
-      ...mapActions('characteristics', ['fetchCharOne', 'updateLocalIdentifier']),
-      ...mapMutations('characteristics', ['updateLocalTitle', 'addLocalValue', 'changeLocalStatus']),
+      ...mapActions('characteristics', ['fetchCharOne']),
+      ...mapMutations('characteristics', ['updateLocalTitle', 'addLocalValue', 'changeLocalStatus', 'updateLocalIdentifier']),
 
       expandValues(val) {
         this.validate(valid => {
@@ -87,8 +93,6 @@
 
 <style lang="stylus">
   .char-identify
-    border-right 1px solid #DCDFE6
-    padding-right 20px
     .values-box
       display grid
       grid-template-columns 6fr 1fr

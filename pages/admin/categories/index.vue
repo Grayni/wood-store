@@ -16,7 +16,7 @@
 
         el-table-column(label="Статус показа" width="140px" align="center" prop="status" sortable :sort-method="sortStatus")
           template(v-slot:default="scope")
-            el-switch(:value="scope.row.status" @input="changeStatusCategory(scope.row.tag, scope.row.status)")
+            el-switch(:value="scope.row.status" @input="changeStatusCategory(scope.row.identifier, scope.row.status)")
 
         el-table-column(label="Действия" width="152")
           template(slot="header" slot-scope="scope")
@@ -24,10 +24,10 @@
 
           template(slot-scope="{row}")
             el-tooltip.item(effect="dark" content="Редактировать категорию" placement="top")
-              el-button(icon="el-icon-edit" type="info" circle @click="open(row.tag)")
+              el-button(icon="el-icon-edit" type="info" circle @click="open(row.identifier)")
 
             el-tooltip(effect="dark" content="Удалить категорию" placement="top")
-              el-button(icon="el-icon-delete" type="danger" circle @click="remove(row.tag)")
+              el-button(icon="el-icon-delete" type="danger" circle @click="remove(row.identifier)")
 
       add(:urls="'/admin/categories/category-create'" :title="'Добавить категорию'")
 </template>
@@ -65,16 +65,17 @@
       sortStatus(a, b) {
         return a.status - b.status
       },
-      async changeStatusCategory(tag, status) {
+      async changeStatusCategory(identifier, status) {
         status = !status
-        const message = await this.changeStatus({tag, status})
+        const message = await this.changeStatus({identifier, status})
+        console.log(message)
         this.$message({message, center: true})
       },
-      open(tag) {
-        this.$router.push(`/admin/categories/${tag}`)
+      open(identifier) {
+        this.$router.push(`/admin/categories/${identifier}`)
       },
-      async remove(tag) {
-          const message = await this.delete({tag})
+      async remove(identifier) {
+          const message = await this.delete({identifier})
           this.$message({message, center: true})
       }
     },

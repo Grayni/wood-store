@@ -1,8 +1,8 @@
 <template lang="pug">
   .characteristics
-    h1.admin-title Характеристика: #[span.notify {{characteristic.title}}]
+    section-title(:section="'Характеристика'" :title="characteristic.title")
 
-    el-form.col-three.character(
+    el-form.col.col_three(
       :model="characteristic"
       :rules="rules"
       :ref="referal"

@@ -50,11 +50,6 @@
 <style lang="stylus">
   .char-base
     padding-left 20px
-    .decorate
-      margin-bottom 20px
-      span
-        text-transform uppercase
-        color #409EFF
     .link-item
       margin-bottom 18px
       font-size 14px

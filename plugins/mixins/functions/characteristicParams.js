@@ -10,8 +10,8 @@ export const characteristicParams = {
     ...mapGetters('characteristics', ['characteristic', 'backupChar'])
   },
   methods: {
-    ...mapActions('characteristics', ['fetchNames', 'createCharacter', 'returnOriginal']),
-    ...mapMutations('characteristics', ['writeValidate']),
+    ...mapActions('characteristics', ['fetchNames', 'createCharacter']),
+    ...mapMutations('characteristics', ['writeValidate', 'clearChar']),
 
     mixOnSubmit(nameForm) {
       this.$refs[nameForm].validate(async valid => {
@@ -33,7 +33,7 @@ export const characteristicParams = {
                 message = await this.createCharacter(formData) ?? 'Что-то не так'
 
                 await this.fetchNames() // update base-char
-                this.returnOriginal() // clear form-char
+                this.clearChar() // clear form-char
               }
 
               this.$message.success(message)

@@ -12,11 +12,6 @@ const categoriesSchema = new Schema({
     required: true,
     unique: true
   },
-  tag: {
-    type: String,
-    lowercase: true,
-    required: true
-  },
   parent: {
     label: {
       type: String,

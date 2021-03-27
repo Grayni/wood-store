@@ -33,44 +33,44 @@ router.post(
   controller.getFirstborns
 )
 
-// /api/categories/admin/:tag
+// /api/categories/admin/:identifier
 router.get(
-  '/admin/:tag',
+  '/admin/:identifier',
   passport.authenticate('jwt', {session: false}),
   controller.getCategory
 )
 
-// /api/categories/admin/:tag
+// /api/categories/admin/:identifier
 router.put(
-  '/admin/:tag',
+  '/admin/:identifier',
   passport.authenticate('jwt', {session: false}),
   controller.updateCategory
 )
 
-// /api/categories/admin/firstborns/:tag
+// /api/categories/admin/firstborns/:identifier
 router.put(
-  '/admin/f/:tag',
+  '/admin/f/:identifier',
   passport.authenticate('jwt', {session: false}),
   controller.updateFirstborns
 )
 
-// /api/categories/admin/:tag
+// /api/categories/admin/:identifier
 router.delete(
-  '/admin/:tag',
+  '/admin/:identifier',
   passport.authenticate('jwt', {session: false}),
   controller.removeCategory
 )
 
-// /api/categories/admin/status/:tag
+// /api/categories/admin/status/:identifier
 router.put(
-  '/admin/status/:tag',
+  '/admin/status/:identifier',
   passport.authenticate('jwt', {session: false}),
-  controller.saveStatus
+  controller.changeStatus
 )
 
-// /api/categories/admin/childrens/:tag
+// /api/categories/admin/childrens/:identifier
 router.get(
-  '/admin/childrens/:tag',
+  '/admin/childrens/:identifier',
   passport.authenticate('jwt', {session: false}),
   controller.getChildrens
 )

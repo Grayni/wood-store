@@ -2,7 +2,7 @@
   .characteristics
     h1.admin-title Характеристики
 
-    el-form.col-three.character(
+    el-form.col.col_three(
       :model="characteristic"
       :rules="rules"
       :ref="referal"
@@ -20,17 +20,14 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
-
   import {validateForm} from '@/plugins/mixins/validateForm'
-  import {transliter} from '@/plugins/mixins/transliter'
   import {characteristicParams, notifyWarn} from '~/plugins/mixins/functions/characteristicParams'
 
   export default {
     name: 'characteristics-page',
     layout: 'admin',
     middleware: ['admin-auth'],
-    mixins: [validateForm, transliter, characteristicParams, notifyWarn],
+    mixins: [validateForm, characteristicParams, notifyWarn],
     head() {
       return {
         title: 'Характеристики',
@@ -41,14 +38,6 @@
             content: 'Страница для взаимодействия со списками и свойствами характеристик.'
           }
         ]
-      }
-    },
-    methods: {
-      ...mapActions('characteristics', ['updateLocalIdentifier'])
-    },
-    watch: {
-      'characteristic.title'() {
-        this.updateLocalIdentifier(this.translit(this.characteristic.title))
       }
     }
   }

@@ -1,11 +1,25 @@
 export const state = () => ({
   categories: [],
   subcategories: [],
-  
+  category: {
+    title: '',
+    parent: {
+      label: '',
+      value: ''
+    },
+    status: false,
+    identifier: '',
+  },
+  firstborns: [],
+  firstborn: {
+    label: '',
+    value: ''
+  }
 })
 
 export const actions = {
-  async fetchList({commit}) {
+  // get list categories
+  async fetchList({commit}) { // +
     try {
       const response = await this.$axios.$get('/api/categories/admin/categories-list')
       commit('fetchList', response)
@@ -16,15 +30,19 @@ export const actions = {
     }
   },
 
-  async fetchParentCategories ({commit}, firstborn) {
+  // get list firstborn categories
+  async fetchListParentsNames ({commit}) { // +
     try {
-      return await this.$axios.$post('/api/categories/admin/category-parent', firstborn)
+      const response = await this.$axios.$post('/api/categories/admin/category-parent')
+      commit('fetchListParentsNames', response)
+      return response
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
+  // create category
   async create({commit}, formData) {
     try {
       return await this.$axios.$post('/api/categories/admin/create-category', formData)
@@ -34,37 +52,43 @@ export const actions = {
     }
   },
 
-  async getCategory({commit}, tag) {
+  // get one category
+  async getCategory({commit}, identifier) { // +
     try {
-      return await this.$axios.$get(`/api/categories/admin/${tag}`)
+      const response = await this.$axios.$get(`/api/categories/admin/${identifier}`)
+      commit('getCategory', response)
+      return
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
-  async updateCategory({commit}, {category, tag}) {
+  // update category
+  async updateCategory({commit}, {category, identifier}) {
     try {
-      return await this.$axios.$put(`/api/categories/admin/${tag}`, category)
+      return await this.$axios.$put(`/api/categories/admin/${identifier}`, category)
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
-  async updateFirstborn({commit}, {tag, parent}) {
+  // update dependent firstborn
+  async updateFirstborn({commit}, {identifier, parent}) {
     try {
-      return await this.$axios.$put(`/api/categories/admin/f/${tag}`, parent)
+      return await this.$axios.$put(`/api/categories/admin/f/${identifier}`, parent)
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
-  async delete({commit}, {tag}) {
+  // delete category
+  async delete({commit}, {identifier}) { // +
     try {
-      const response = await this.$axios.$delete(`/api/categories/admin/${tag}`)
-      commit('delete', tag)
+      const response = await this.$axios.$delete(`/api/categories/admin/${identifier}`)
+      commit('delete', identifier)
       return response
     } catch (e) {
       commit('setError', e, {root: true})
@@ -72,10 +96,11 @@ export const actions = {
     }
   },
 
-  async changeStatus({commit}, {tag, status}) {
+  // change status show category
+  async changeStatus({commit}, {identifier, status}) { // +
     try { 
-      const response = await this.$axios.$put(`/api/categories/admin/status/${tag}`, {status})
-      commit('changeStatus', {tag, status})
+      const response = await this.$axios.$put(`/api/categories/admin/status/${identifier}`, {status})
+      commit('changeStatus', {identifier, status})
       return response
     } catch(e) {
       commit('setError', e, {root: true})
@@ -83,18 +108,21 @@ export const actions = {
     }
   },
 
-  async getChildrens({commit}, {tag}) {
+  // get childrens this category
+  async getChildrens({commit}, {identifier}) {
     try {
-      return await this.$axios.$get(`/api/categories/admin/childrens/${tag}`)
+      return await this.$axios.$get(`/api/categories/admin/childrens/${identifier}`)
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
     }
   },
 
+  // get subcategories list
   async fetchSubcategoriesList({commit}) {
     try {
       const response = await this.$axios.$get('/api/categories/admin/subcategories')
+      console.log(response)
       commit('fillSubcategoriesList', response)
     } catch (e) {
       commit('setError', e, {root: true})
@@ -104,16 +132,33 @@ export const actions = {
 }
 
 export const mutations = {
-  fetchList(state, categories) {
+  fetchList(state, categories) { // +
     state.categories = categories
   },
 
-  changeStatus(state, {tag, status}) {
-    state.categories.find(category => category.tag === tag).status = status
+  getCategory(state, category) { // +
+    state.category = category
   },
 
-  delete(state, tag) {
-    state.categories = state.categories.filter(v => v.tag !== tag)
+  fetchListParentsNames(state, firstborns) { // +
+    state.firstborns = firstborns
+  },
+
+  changeTitle(state, title) {
+    console.log(title)
+    state.category.title = title
+  },
+
+  defineFirstborn(state, value) { // +
+    state.firstborn = state.firstborns.find(x => x.value === value)
+  },
+
+  changeStatus(state, {identifier, status}) {
+    state.categories.find(category => category.identifier === identifier).status = status
+  },
+
+  delete(state, identifier) {
+    state.categories = state.categories.filter(v => v.identifier !== identifier)
   },
 
   fillSubcategoriesList(state, subcategories) {
@@ -122,6 +167,18 @@ export const mutations = {
 }
 
 export const getters = {
+  category(state) { // +
+    return state.category
+  },
+
+  firstborns(state) { // +
+    return state.firstborns
+  },
+  
+  firstborn(state) { // +
+    return state.firstborn
+  },
+
   categories(state) {
     return state.categories
   },

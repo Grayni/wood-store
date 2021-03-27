@@ -105,13 +105,16 @@ export const actions = {
 }
 
 
-
 export const mutations = {
 
   // start update characteristic form
 
   updateLocalTitle(state, title) {
     state.characteristic.title = title.toLowerCase()
+  },
+
+  updateLocalIdentifier(state, identifier) {
+    state.characteristic.identifier = identifier.toLowerCase()
   },
 
   addLocalValue(state, value) {

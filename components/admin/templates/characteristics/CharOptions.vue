@@ -1,5 +1,5 @@
 <template lang="pug">
-  .char-options
+  .char-options.col-2
     h2.decorate Свойства характеристики:
     transition-group(name="list" tag="div" :class="'list-values'")
       .tags-wrap(v-for="(value, i) in characteristic.values" :key="value+1")
@@ -41,8 +41,6 @@
 
 <style lang="stylus">
   .char-options
-    border-right 1px solid #DCDFE6
-    padding-left 20px
     .list
       &-values
         display flex
