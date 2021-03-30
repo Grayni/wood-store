@@ -1,5 +1,6 @@
 const User = require('../models/user.model')
-const Character = require('../models/characteristics.model.js')
+const Character = require('../models/characteristic.model.js')
+const Category = require('../models/category.model.js')
 const bcrypt = require('bcryptjs')
 const ObjectId = require('mongodb').ObjectId
 
@@ -29,12 +30,16 @@ module.exports.checkPass = async (req, res) => {
 }
 
 module.exports.checkIdentifier = async (req, res) => {
+  const collections = {
+    'characteristics': Character,
+    'categories': Category
+  }
+
   try {
-      const isExistValue = await Character.findOne({identifier: req.body.value})
-      const response = isExistValue ? true : false
+    const isExistValue = await collections[req.params.section].findOne({identifier: req.body.value})
+    const response = isExistValue ? true : false
 
-      res.status(200).json(response)
-
+    res.status(200).json(response)
   } catch (e) {
     res.status(500).json(e)
   }

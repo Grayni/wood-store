@@ -19,9 +19,9 @@ export const actions = {
     }
   },
 
-  async checkCharacter ({commit}, payload) {
+  async checkIdentifier ({commit}, {section, value}) {
     try {
-      return await this.$axios.$post('/api/validate/unique-identifier', payload)
+      return await this.$axios.$post(`/api/validate/unique-identifier/${section}`, {value})
     } catch (e) {
       commit('setError', e, {root: true})
     }

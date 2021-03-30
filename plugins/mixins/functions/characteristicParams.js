@@ -70,7 +70,6 @@ export const notifyWarn = {
       }
 
       notifyWarning.message = message
-      console.log(this)
       this.$notify(notifyWarning)
     }
   }

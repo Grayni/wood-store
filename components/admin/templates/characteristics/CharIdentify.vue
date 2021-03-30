@@ -58,7 +58,7 @@
     },
     methods: {
       ...mapActions('characteristics', ['fetchCharOne']),
-      ...mapMutations('characteristics', ['updateLocalTitle', 'addLocalValue', 'changeLocalStatus', 'updateLocalIdentifier']),
+      ...mapMutations('characteristics', ['updateLocalTitle', 'updateLocalIdentifier', 'changeLocalStatus', 'addLocalValue']),
 
       expandValues(val) {
         this.validate(valid => {

@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-select(:value="firstborn.value" @input="defineFirstborn" placeholder="Выбор категории или нулевого уровня")
+  el-select(:value="category.parent.value" @input="defineParentParams" placeholder="Выбор категории или нулевого уровня")
     el-option(v-for="item in firstborns" :key="item.value" :label="item.label" :value="item.value")
 </template>
 
@@ -8,14 +8,19 @@
   export default {
     name: 'cat-firstborns',
     computed: {
-      ...mapGetters('categories', ['firstborns', 'firstborn'])
+      ...mapGetters('categories', ['firstborns', 'category'])
     },
     methods: {
       ...mapActions('categories', ['fetchListParentsNames']),
-      ...mapMutations('categories', ['defineFirstborn'])
+      ...mapMutations('categories', ['defineParent']),
+
+      defineParentParams(event) {
+        const parent = this.firstborns.find(x => x.value === event)
+        return this.defineParent(parent)
+      }
     },
-    created() {
-      this.fetchListParentsNames()
+    async created() {
+      await this.fetchListParentsNames()
     }
   }
 </script>

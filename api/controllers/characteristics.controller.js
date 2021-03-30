@@ -1,9 +1,9 @@
-const Char = require('../models/characteristics.model')
+const Character = require('../models/characteristic.model')
 
 
 module.exports.create = async (req, res) => {
   try {
-    const characteristics = new Char({
+    const characteristics = new Character({
       title: req.body.title,
       identifier: req.body.identifier,
       status: req.body.status,
@@ -20,7 +20,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.getNames = async (req, res) => {
   try {
-    const list = await Char.find({}, {title: 1, identifier: 1, _id: 0})
+    const list = await Character.find({}, {title: 1, identifier: 1, _id: 0})
 
     res.status(200).json(list)
   } catch (e) {
@@ -30,7 +30,7 @@ module.exports.getNames = async (req, res) => {
 
 module.exports.getCharacter = async (req, res) => {
   try {
-    const character = await Char.findOne({identifier: req.params.identifier})
+    const character = await Character.findOne({identifier: req.params.identifier})
     res.status(200).json(character)
   } catch (e) {
     res.status(500).json(e)
@@ -41,7 +41,7 @@ module.exports.update = async (req, res) => {
   try {
     const $set = {}
     Object.assign($set, req.body)
-    await Char.findOneAndUpdate({identifier: req.params.identifier}, {$set})
+    await Character.findOneAndUpdate({identifier: req.params.identifier}, {$set})
     res.status(200).json('Характеристика успешно обновлена!')
   } catch(e) {
     res.status(500).json(e)
@@ -50,7 +50,7 @@ module.exports.update = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   try {
-    await Char.findOneAndRemove({identifier: req.params.identifier})
+    await Character.findOneAndRemove({identifier: req.params.identifier})
     res.status(200).json('Характеристика успешно удалена!')
   } catch (e) {
     res.status(500).json(e)
@@ -59,7 +59,7 @@ module.exports.delete = async (req, res) => {
 
 module.exports.getAll = async (req, res) => {
   try {
-    const chars = await Char.find()
+    const chars = await Character.find()
     res.status(200).json(chars)
   } catch(e) {
     res.status(500).json(e)
@@ -81,7 +81,7 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.deleteValueCharacter = async (req, res) => {
   try {
-    await Char.findOneAndUpdate(
+    await Character.findOneAndUpdate(
       { identifier: req.params.identifier },
       { $pull: {values: {$in: [req.body.value]}} }
     )

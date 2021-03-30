@@ -68,7 +68,6 @@
       async changeStatusCategory(identifier, status) {
         status = !status
         const message = await this.changeStatus({identifier, status})
-        console.log(message)
         this.$message({message, center: true})
       },
       open(identifier) {

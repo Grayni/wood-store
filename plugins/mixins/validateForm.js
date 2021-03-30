@@ -52,9 +52,14 @@ export const validateForm = {
     }
 
     const uniqueIdentifier = async (rule, value, callback) => {
-      const unique = await this.$store.dispatch('validate/checkCharacter', {value})
+      const section = /(?:^admin-)(\w+)/.exec(this.$route.name)[1]
 
-      unique ? callbackg(new Error(rule.message)) : callback()
+      if (section === 'categories') // if value not change
+        if (this.$route.params.identifier === value) return callback()
+
+      const unique = await this.$store.dispatch('validate/checkIdentifier', {value, section})
+
+      unique ? callback(new Error(rule.message)) : callback()
     }
 
     return {

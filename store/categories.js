@@ -11,10 +11,26 @@ export const state = () => ({
     identifier: '',
   },
   firstborns: [],
-  firstborn: {
-    label: '',
-    value: ''
-  }
+  childrens: [],
+  categoryInitial: {
+    title: '',
+    parent: {
+      label: '',
+      value: ''
+    },
+    status: false,
+    identifier: ''
+  },
+  categoryEmpty: {
+    title: '',
+    parent: {
+      label: '',
+      value: ''
+    },
+    status: false,
+    identifier: ''
+  },
+  loading: false
 })
 
 export const actions = {
@@ -43,9 +59,9 @@ export const actions = {
   },
 
   // create category
-  async create({commit}, formData) {
+  async createCategory({commit}, category) {
     try {
-      return await this.$axios.$post('/api/categories/admin/create-category', formData)
+      return await this.$axios.$post('/api/categories/admin/create-category', category)
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
@@ -66,6 +82,7 @@ export const actions = {
 
   // update category
   async updateCategory({commit}, {category, identifier}) {
+    console.log(category, identifier)
     try {
       return await this.$axios.$put(`/api/categories/admin/${identifier}`, category)
     } catch (e) {
@@ -75,7 +92,7 @@ export const actions = {
   },
 
   // update dependent firstborn
-  async updateFirstborn({commit}, {identifier, parent}) {
+  async updateFirstborn({commit}, {identifier, parent}) { // +
     try {
       return await this.$axios.$put(`/api/categories/admin/f/${identifier}`, parent)
     } catch (e) {
@@ -111,7 +128,8 @@ export const actions = {
   // get childrens this category
   async getChildrens({commit}, {identifier}) {
     try {
-      return await this.$axios.$get(`/api/categories/admin/childrens/${identifier}`)
+      const response = await this.$axios.$get(`/api/categories/admin/childrens/${identifier}`)
+      commit('getChildrens', response)
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
@@ -122,7 +140,6 @@ export const actions = {
   async fetchSubcategoriesList({commit}) {
     try {
       const response = await this.$axios.$get('/api/categories/admin/subcategories')
-      console.log(response)
       commit('fillSubcategoriesList', response)
     } catch (e) {
       commit('setError', e, {root: true})
@@ -140,21 +157,40 @@ export const mutations = {
     state.category = category
   },
 
+  resetCategory(state, category) {
+    state.category = JSON.parse(JSON.stringify(state.categoryEmpty))
+  },
+
+  getChildrens(state, childrens) {
+    state.childrens = childrens
+  },
+
+  resetChildrens(state) {
+    state.childrens = []
+  },
+
   fetchListParentsNames(state, firstborns) { // +
     state.firstborns = firstborns
   },
 
   changeTitle(state, title) {
-    console.log(title)
     state.category.title = title
   },
 
-  defineFirstborn(state, value) { // +
-    state.firstborn = state.firstborns.find(x => x.value === value)
+  changeIdentifier(state, identifier) {
+    state.category.identifier = identifier
+  },
+
+  defineParent(state, parent) { // +
+    state.category.parent = parent
   },
 
   changeStatus(state, {identifier, status}) {
     state.categories.find(category => category.identifier === identifier).status = status
+  },
+
+  changeLocalStatus(state) {
+    state.category.status = !state.category.status
   },
 
   delete(state, identifier) {
@@ -163,27 +199,51 @@ export const mutations = {
 
   fillSubcategoriesList(state, subcategories) {
     state.subcategories = subcategories
+  },
+  initCategory(state) {
+    state.categoryInitial = JSON.parse(JSON.stringify(state.category))
+  },
+
+  changeLoading(state, bool) {
+    state.loading = bool
+  },
+
+  updateLocalIdentifier(state, identifier) {
+    state.category.identifier = identifier
   }
 }
 
 export const getters = {
-  category(state) { // +
-    return state.category
-  },
 
   firstborns(state) { // +
     return state.firstborns
-  },
-  
-  firstborn(state) { // +
-    return state.firstborn
   },
 
   categories(state) {
     return state.categories
   },
 
+  category(state) { // +
+    return state.category
+  },
+
+  categoryInitial(state) {
+    return state.categoryInitial
+  },
+
+  categoryEmpty(state) {
+    return state.categoryEmpty
+  },
+
+  childrens(state) {
+    return state.childrens
+  },
+
   subcategoriesList(state) {
     return state.subcategories
+  },
+
+  loading(state) {
+    return state.loading
   }
 }

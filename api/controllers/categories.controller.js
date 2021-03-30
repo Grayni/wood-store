@@ -58,17 +58,19 @@ module.exports.updateCategory = async (req, res) => {
     Object.assign($set, req.body)
 
     const category = await Category.findOneAndUpdate({identifier: req.params.identifier}, {$set})
-    res.status(200).json({good: 'good'})
+    res.status(200).json('Категория успешно обновлена!')
   } catch (e) {
     res.status(500).json(e)
   }
 }
 
+// update dependencies childrens categories from parents, if parent change identifier or title
 module.exports.updateFirstborns = async (req, res) => {
   try {
     const $set = {
       parent: req.body
     }
+    console.log(req.body, req.params.identifier)
     await Category.updateMany({'parent.value': req.params.identifier}, {$set})
     res.status(200).json('Первородный обновлен!')
   } catch (e) {
@@ -99,7 +101,7 @@ module.exports.changeStatus = async (req, res) => {
 
 module.exports.getChildrens = async (req, res) => {
   try {
-    const childrens = await Category.find({'parent.value': req.params.identifier}, {title: 1, _id: 0})
+    const childrens = await Category.find({'parent.value': req.params.identifier}, {title: 1, identifier: 1, _id: 0})
     res.status(200).json(childrens)
   } catch (e) {
     res.status(500).json(e)

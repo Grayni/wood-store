@@ -27,7 +27,7 @@
 
     el-menu-item(index="/admin/categories")
       i.el-icon-finished
-      span Список категорий
+      span Категории
 
     el-menu-item(index="/admin/characteristics")
       i.el-icon-setting

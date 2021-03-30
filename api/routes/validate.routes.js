@@ -17,9 +17,9 @@ router.post(
 )
 module.exports = router
 
-// /api/validate/unique-identifier
+// /api/validate/unique-identifier/:section
 router.post(
-  '/unique-identifier',
+  '/unique-identifier/:section',
   passport.authenticate('jwt', {session: false}),
   controller.checkIdentifier
 )

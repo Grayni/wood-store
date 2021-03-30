@@ -75,8 +75,19 @@ h1, h2, h3, label, li, span, a, div, input
   text-decoration none
   &:hover
     color #66b1ff
+
 .tag
   margin-right 5px
+  &-dependencies
+    &:hover
+      background-color #409EFF
+      cursor pointer
+      a
+        color #fff
+  &-link
+    text-decoration none
+    color #409EFF
+
 
 .decorate
   margin-bottom 20px
@@ -96,14 +107,14 @@ h1, h2, h3, label, li, span, a, div, input
     padding-left 20px
 .table-box
   max-width 1100px
-  flex-basis 100%
   &-wrapper
     display flex
+    flex-direction column
+    align-items center
     justify-content center
-    flex-wrap wrap
     width 100%
-    min-height 100vh
-
+  .el-table
+    flex 2
 .admin-enter-active, .admin-leave-active
   transition opacity 0.5s
 

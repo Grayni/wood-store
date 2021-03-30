@@ -4,24 +4,22 @@
     el-form.col.col_two(
       :model="category"
       :rules="rules"
-      ref="create-category"
-      @submit.native.prevent="onSubmit('create-category')"
+      ref="category"
+      @submit.native.prevent="onSubmit('category')"
     )
-      cat-identify(:category="category")
-      //- .cat-dependent.col-2
-      //-   .show-child(v-if="category.parent.value === 'firstborn'")
-      //-     h2.decorate Зависимые категории:
-      //-     div.list-childs(v-for="item in childrens" :key="item.title")
-      //-       el-tag {{item.title}}
+      cat-identify
+      cat-dependent
 
 </template>
 
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
   import {validateForm} from '@/plugins/mixins/validateForm'
+  import {notifyWarn} from '@/plugins/mixins/functions/characteristicParams'
   export default {
     name: 'category_redact',
     middleware: ['admin-auth'],
+    mixins: [notifyWarn],
     layout: 'admin',
     head() {
       return {
@@ -35,21 +33,77 @@
         ]
       }
     },
-    mixins: [validateForm],
-    data() {
-      return {
-      }
-    },
+    mixins: [validateForm, notifyWarn],
     computed: {
-      ...mapGetters('categories', ['category'])
+      ...mapGetters('categories', ['category', 'categoryInitial'])
     },
     methods: {
-      ...mapActions('categories', ['getCategory'])
+      ...mapActions('categories', ['getCategory', 'updateCategory', 'updateFirstborn']),
+      ...mapMutations('categories', ['initCategory', 'changeLoading']),
+
+      compareCategoryState() { // has change category state?
+        const keys = Object.keys(this.categoryInitial)
+
+        let result = keys.every(x => {
+          if (typeof this.categoryInitial[x] === 'object') // parent obj
+            return this.categoryInitial[x].value === this.category[x].value
+
+          return this.categoryInitial[x] === this.category[x]
+        })
+
+        return result
+      },
+
+      async updateChildsParent() {
+        const message = await this.updateFirstborn({
+          identifier: this.categoryInitial.identifier,
+          parent: {
+            value: this.category.identifier,
+            label: this.category.title
+          }
+        }) // update dependencies-child
+
+        await this.$notify.success(message)
+      },
+
+      onSubmit(formName) {
+        this.$refs[formName].validate(async valid => {
+          if (valid) {
+            try {
+              this.changeLoading(true)
+
+              {
+                const result = this.compareCategoryState()
+                if (result) return this.mixNotifyWarn('Измените данные для сохранения')
+              }
+              
+              const message = await this.updateCategory({
+                category: this.category,
+                identifier: this.categoryInitial.identifier
+              })
+
+
+              
+              if (this.$route.params.identifier !== this.category.identifier) { // if identifier change
+                this.$router.push(`/admin/categories/${this.category.identifier}`) // load page with new url
+                await this.updateChildsParent()
+              } else if (this.categoryInitial.title !== this.category.title) { // if change title parent category
+                await this.updateChildsParent()
+              }
+
+              await this.$notify.success(message)
+
+              this.initCategory() // update initial category
+
+            } catch (e) {} finally { this.changeLoading(false) }
+          }
+        })
+      }
     },
-    created() {
-      this.getCategory(this.$route.params.identifier)
+    async created() {
+      await this.getCategory(this.$route.params.identifier)
+      this.initCategory() // record initial state of the category
     }
-    
   }
 </script>
 
@@ -57,52 +111,3 @@
   .list-childs
     margin-bottom 5px
 </style>
-
-
-
-// async asyncData({store, params}) {
-//         const identifier = params.identifier
-//         const category = await store.dispatch('categories/getCategory', identifier)
-//         const firstborns = await store.dispatch('categories/fetchParentCategories', {value: 'firstborn'})
-//         const titleInit = category.title
-//         let childrens = []
-//         if (category.parent.value === 'firstborn') {
-//            childrens = await store.dispatch('categories/getChildrens', {identifier})
-//         }
-//         return {category, firstborns, identifier, titleInit, childrens}
-//     },
-//     computed: {
-//       title() {
-//         return (this.category.parent.label).replace(/\W/, x => x.toUpperCase())
-//       }
-//     },
-//     watch: {
-//       'category.parent.value'() {
-//         this.category.parent.label = (this.firstborns.filter(v => v.value === this.category.parent.value)[0]).label
-//       }
-//     },
-//     methods: {
-//       async onSubmit() {
-//         try {
-//           this.loading = true
-
-//           // await this.$store.dispatch('categories/updateCategory', {category: this.category, identifier: this.identifier})
-//           console.log(`(${this.identifier}, ${this.category.identifier}), (${this.titleInit}, ${this.category.title})`)
-//           // if (this.identifier !== this.category.identifier || this.titleInit !== this.category.title) {
-//           //   this.$router.push(`/admin/categories/${this.category.identifier}`)
-
-//           //   if (this.category.parent.value === 'firstborn') {
-//           //     const parentNew = {label: this.category.title, value: this.category.identifier}
-//           //     const message = await this.$store.dispatch('categories/updateFirstborn', {identifier: this.identifier, parent: parentNew})
-//           //     this.$message({ message, center: true})
-//           //     this.firstborns = await this.$store.dispatch('categories/fetchParentCategories', {value: 'firstborn'})
-
-//           //   }
-//           // }
-
-//           this.$message({ message: 'Категория обновлена.', center: true })
-//         } catch (e) {} finally {
-//           this.loading = false
-//         }
-//       }
-//     }
