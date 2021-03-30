@@ -82,7 +82,6 @@ export const actions = {
 
   // update category
   async updateCategory({commit}, {category, identifier}) {
-    console.log(category, identifier)
     try {
       return await this.$axios.$put(`/api/categories/admin/${identifier}`, category)
     } catch (e) {
@@ -92,7 +91,7 @@ export const actions = {
   },
 
   // update dependent firstborn
-  async updateFirstborn({commit}, {identifier, parent}) { // +
+  async updateFirstbornInChild({commit}, {identifier, parent}) { // +
     try {
       return await this.$axios.$put(`/api/categories/admin/f/${identifier}`, parent)
     } catch (e) {
@@ -102,10 +101,10 @@ export const actions = {
   },
 
   // delete category
-  async delete({commit}, {identifier}) { // +
+  async deleteCategory({commit}, {identifier}) { // +
     try {
       const response = await this.$axios.$delete(`/api/categories/admin/${identifier}`)
-      commit('delete', identifier)
+      commit('deleteLocalCategory', identifier)
       return response
     } catch (e) {
       commit('setError', e, {root: true})
@@ -157,15 +156,15 @@ export const mutations = {
     state.category = category
   },
 
-  resetCategory(state, category) {
+  resetCategory(state, category) { // +
     state.category = JSON.parse(JSON.stringify(state.categoryEmpty))
   },
 
-  getChildrens(state, childrens) {
+  getChildrens(state, childrens) { // +
     state.childrens = childrens
   },
 
-  resetChildrens(state) {
+  resetChildrens(state) { // +
     state.childrens = []
   },
 
@@ -173,11 +172,11 @@ export const mutations = {
     state.firstborns = firstborns
   },
 
-  changeTitle(state, title) {
+  changeTitle(state, title) { // +
     state.category.title = title
   },
 
-  changeIdentifier(state, identifier) {
+  changeIdentifier(state, identifier) { // +
     state.category.identifier = identifier
   },
 
@@ -185,22 +184,23 @@ export const mutations = {
     state.category.parent = parent
   },
 
-  changeStatus(state, {identifier, status}) {
+  changeStatus(state, {identifier, status}) { // +
     state.categories.find(category => category.identifier === identifier).status = status
   },
 
-  changeLocalStatus(state) {
+  changeLocalStatus(state) { // +
     state.category.status = !state.category.status
   },
 
-  delete(state, identifier) {
-    state.categories = state.categories.filter(v => v.identifier !== identifier)
+  deleteLocalCategory(state, identifier) { // +
+    state.childrens = state.childrens.filter(v => v.identifier !== identifier)
   },
 
   fillSubcategoriesList(state, subcategories) {
     state.subcategories = subcategories
   },
-  initCategory(state) {
+
+  initCategory(state) { // +
     state.categoryInitial = JSON.parse(JSON.stringify(state.category))
   },
 

@@ -16,31 +16,29 @@ const keys = require('./keys/index.js')
 
 app.disable('x-powered-by')
 
-{ // mongo
+// mongo
   mongoose.set('useCreateIndex', true) //  useUnifiedTopology: true
   mongoose.set('useFindAndModify', false)
 
   mongoose.connect(keys.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
   .then(() => console.log('MongoDB connected...'))
   .catch(error => console.log(error))
-}
 
-{ // passport
+// passport
   app.use(passport.initialize())
   passport.use(passportStrategy)
-}
 
-{ // bodyParser
+
+// bodyParser
   app.use(bodyParser.urlencoded({extended: true}))
   app.use(bodyParser.json())
-}
 
-{ // routes
+
+// routes
   app.use('/api/categories', categoriesRoutes)
   app.use('/api/auth', authRoutes)
   app.use('/api/validate', validateRoutes)
   app.use('/api/users', usersRoutes)
   app.use('/api/characteristics', characterRoutes)
-}
 
 module.exports = { handler: app }

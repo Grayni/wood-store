@@ -38,7 +38,7 @@
       ...mapGetters('categories', ['category', 'categoryInitial'])
     },
     methods: {
-      ...mapActions('categories', ['getCategory', 'updateCategory', 'updateFirstborn']),
+      ...mapActions('categories', ['getCategory', 'updateCategory', 'updateFirstbornInChild']),
       ...mapMutations('categories', ['initCategory', 'changeLoading']),
 
       compareCategoryState() { // has change category state?
@@ -55,7 +55,7 @@
       },
 
       async updateChildsParent() {
-        const message = await this.updateFirstborn({
+        const message = await this.updateFirstbornInChild({
           identifier: this.categoryInitial.identifier,
           parent: {
             value: this.category.identifier,

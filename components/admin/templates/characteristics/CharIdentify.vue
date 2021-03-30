@@ -14,7 +14,7 @@
         el-button(type="primary" @click="expandValues(value)") +
 
     el-form-item(label="Статус показа")
-      el-switch(v-model="status" @change="changeLocalStatus(status)" active-text="Видно" inactive-text="Скрыто")
+      el-switch(:value="characteristic.status" @change="changeStatus($event)" active-text="Видно" inactive-text="Скрыто")
 
     .button-wrap
       el-button.button-active(:class="{'button-active-save': buttonActiveSave}" type="primary" native-type="submit" :loading="loading")
@@ -38,13 +38,13 @@
     data() {
       return {
         value: '',
-        loading: false,
-        status: false
+        loading: false
       }
     },
     watch: {
       'characteristic.title'() {
-        this.updateLocalIdentifier(this.translit(this.characteristic.title))
+        if (!this.$route.params.identifier)
+          this.updateLocalIdentifier(this.translit(this.characteristic.title))
       }
     },
     computed: {
@@ -58,7 +58,7 @@
     },
     methods: {
       ...mapActions('characteristics', ['fetchCharOne']),
-      ...mapMutations('characteristics', ['updateLocalTitle', 'updateLocalIdentifier', 'changeLocalStatus', 'addLocalValue']),
+      ...mapMutations('characteristics', ['updateLocalTitle', 'updateLocalIdentifier', 'changeLocalStatus', 'addLocalValue', 'statusOff']),
 
       expandValues(val) {
         this.validate(valid => {
@@ -83,10 +83,11 @@
 
           }
         })
+      },
+      changeStatus(event) {
+        if (!this.characteristic.values.length) return this.statusOff()
+        this.changeLocalStatus(event)
       }
-    },
-    beforeUpdate() {
-      this.status = this.characteristic.status
     }
   }
 </script>

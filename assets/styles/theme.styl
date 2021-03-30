@@ -115,8 +115,27 @@ h1, h2, h3, label, li, span, a, div, input
     width 100%
   .el-table
     flex 2
+
+.delete-times
+  font-size 25px
+  line-height 0
+  position relative
+  padding 0
+  top 5px
+  color #fde2e2
+  &:hover
+    color #F56C6C
 .admin-enter-active, .admin-leave-active
   transition opacity 0.5s
 
 .admin-enter, .admin-leave-active
   opacity 0
+
+.list-enter-active, .list-leave-active
+  max-height 20px
+  transition all .4s
+.list-enter, .list-leave-to
+  opacity 0
+  max-height 0px
+  transform translateX(30px)
+  transition all .4s

@@ -1,3 +1,12 @@
+export const state = () => ({
+  deleteNotify: {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Отмена',
+    type: 'warning',
+    center: true
+  }
+})
+
 export const actions = {
 
   //validate unique
@@ -25,5 +34,11 @@ export const actions = {
     } catch (e) {
       commit('setError', e, {root: true})
     }
+  }
+}
+
+export const getters = {
+  deleteNotify(state) {
+    return state.deleteNotify
   }
 }

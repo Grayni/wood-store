@@ -65,12 +65,11 @@ module.exports.updateCategory = async (req, res) => {
 }
 
 // update dependencies childrens categories from parents, if parent change identifier or title
-module.exports.updateFirstborns = async (req, res) => {
+module.exports.updateFirstbornInChild = async (req, res) => {
   try {
     const $set = {
       parent: req.body
     }
-    console.log(req.body, req.params.identifier)
     await Category.updateMany({'parent.value': req.params.identifier}, {$set})
     res.status(200).json('Первородный обновлен!')
   } catch (e) {

@@ -16,11 +16,17 @@ export const state = () => ({
     values: [],
     status: false
   },
-  validate: null
+  validate: null,
+  characteristicInitial: {
+    title: '',
+    identifier: '',
+    values: [],
+    status: false
+  }
 })
 
-let stateInitial = {}
-Object.assign(stateInitial, state().characteristic)
+// let stateInitial = {}
+// Object.assign(stateInitial, state().characteristic)
 
 export const actions = {
 
@@ -46,8 +52,8 @@ export const actions = {
 
   async deleteCharacter({commit}, identifier) {
     try {
-      commit('deleteLocalCharacter', identifier)
       const message = await this.$axios.$delete(`/api/characteristics/admin/${identifier}`)
+      commit('deleteLocalCharacter', identifier)
       return message
     } catch(e) {
       commit('setError', e, {root: true})
@@ -107,8 +113,6 @@ export const actions = {
 
 export const mutations = {
 
-  // start update characteristic form
-
   updateLocalTitle(state, title) {
     state.characteristic.title = title.toLowerCase()
   },
@@ -130,26 +134,34 @@ export const mutations = {
     state.backupChar.values.splice(index, 1)
   },
 
-  // end update characteristic form
-
   fillCharsList(state, chars) {
     state.characteristics = chars
   },
+
   fillNames(state, names) {
     state.names = names
   },
+
   deleteLocalCharacter(state, identifier) {
     state.names = state.names.filter(x => x.identifier !== identifier)
   },
+
   assignChar(state, {response, resFrozen}) {
     state.characteristic = response
     state.backupChar = resFrozen
   },
+
   clearChar(state) {
-    state.characteristic = stateInitial
+    state.characteristic = JSON.parse(JSON.stringify(state.characteristicInitial))
+    console.log(state.characteristic)
   },
+
   writeValidate(state, validate) {
     state.validate = validate
+  },
+
+  statusOff(state) {
+    state.characteristic.status = false
   }
 }
 

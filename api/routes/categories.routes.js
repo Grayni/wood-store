@@ -47,11 +47,11 @@ router.put(
   controller.updateCategory
 )
 
-// /api/categories/admin/firstborns/:identifier
+// /api/categories/admin/f/:identifier
 router.put(
   '/admin/f/:identifier',
   passport.authenticate('jwt', {session: false}),
-  controller.updateFirstborns
+  controller.updateFirstbornInChild
 )
 
 // /api/categories/admin/:identifier

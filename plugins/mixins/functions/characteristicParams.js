@@ -18,7 +18,6 @@ export const characteristicParams = {
         if (valid) {
           if (this.characteristic.values.length) {
             if (JSON.stringify(this.characteristic) !== JSON.stringify(this.backupChar)) {
-
               this.loading = true
               const formData = Object.assign({}, this.characteristic)
               let message

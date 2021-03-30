@@ -13,18 +13,23 @@
   import {mapGetters, mapActions, mapMutations} from 'vuex'
   export default {
     name: 'char-options',
+    watch: {
+      'characteristic.values'() {
+        if (!this.characteristic.values.length) this.statusOff()
+      }
+    },
     computed: {
       ...mapGetters('characteristics', ['characteristic', 'backupChar'])
     },
     methods: {
       ...mapActions('characteristics', ['deleteValue']),
-      ...mapMutations('characteristics', ['clearChar']),
+      ...mapMutations('characteristics', ['clearChar', 'statusOff']),
 
       async addNotifyDelete(index, value) {
         const formData = {
           index,
           value,
-          identifier: this.$route.params.identifier
+          identifier: this.$route.params.identifier,
         }
 
         const message = await this.deleteValue(formData)
@@ -77,13 +82,4 @@
       flex-wrap wrap
       .tags-wrap
         margin-bottom 5px
-
-    .list-enter-active, .list-leave-active
-      max-height 20px
-      transition all .4s
-    .list-enter, .list-leave-to
-      opacity 0
-      max-height 0px
-      transform translateX(30px)
-      transition all .4s
 </style>
