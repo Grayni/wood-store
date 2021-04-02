@@ -3,24 +3,16 @@ import Cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 
 export const state = () => ({
-  token: null
+  token: null,
+  users: []
 })
-
-export const mutations = {
-
-  setToken(state, token) {
-    state.token = token
-  },
-
-  clearToken(state) {
-    state.token = null
-  }
-}
 
 export const actions = {
   async fetchUsersList({commit}) {
     try {
-      return await this.$axios.$get('/api/auth/admin/users-list')
+      const response = await this.$axios.$get('/api/auth/admin/users-list')
+      commit('fetchUsersList', response)
+      return 'good'
     } catch (e) {
       commit('setError', e, {root: true})
       throw e
@@ -79,12 +71,41 @@ export const actions = {
       commit('setError', e, {root: true})
       throw e
     }
+  },
+
+  async removeUser({commit}, id) {
+    try {
+      commit('removeUser', id)
+      return await this.$axios.$delete(`/api/users/admin/${id}`)
+    } catch(e) {
+      commit('setError', e, {root: true})
+      throw e
+    }
+  }
+}
+
+export const mutations = {
+  setToken(state, token) {
+    state.token = token
+  },
+
+  clearToken(state) {
+    state.token = null
+  },
+
+  fetchUsersList(state, users) {
+    state.users = users
+  },
+
+  removeUser(state, id) {
+    state.users = state.users.filter(x=> x._id !== id)
   }
 }
 
 export const getters = {
   isAuthenticated: state => Boolean(state.token),
-  token: state => state.token
+  token: state => state.token,
+  users: state => state.users
 }
 
 function isJWTValid(token) {

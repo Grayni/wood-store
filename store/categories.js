@@ -104,7 +104,7 @@ export const actions = {
   async deleteCategory({commit}, {identifier}) { // +
     try {
       const response = await this.$axios.$delete(`/api/categories/admin/${identifier}`)
-      commit('deleteLocalCategory', identifier)
+      commit('deleteLocalCategory', {identifier})
       return response
     } catch (e) {
       commit('setError', e, {root: true})
@@ -192,8 +192,8 @@ export const mutations = {
     state.category.status = !state.category.status
   },
 
-  deleteLocalCategory(state, identifier) { // +
-    state.childrens = state.childrens.filter(v => v.identifier !== identifier)
+  deleteLocalCategory(state, {identifier}) { // +
+    state.categories = state.categories.filter(v => v.identifier !== identifier)
   },
 
   fillSubcategoriesList(state, subcategories) {

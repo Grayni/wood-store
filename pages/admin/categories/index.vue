@@ -60,7 +60,7 @@
       ...mapGetters('categories', ['categories'])
     },
     methods: {
-      ...mapActions('categories', ['fetchList', 'changeStatus', 'delete']),
+      ...mapActions('categories', ['fetchList', 'changeStatus', 'deleteCategory']),
 
       sortStatus(a, b) {
         return a.status - b.status
@@ -74,7 +74,7 @@
         this.$router.push(`/admin/categories/${identifier}`)
       },
       async remove(identifier) {
-          const message = await this.delete({identifier})
+          const message = await this.deleteCategory({identifier})
           this.$message({message, center: true})
       }
     },

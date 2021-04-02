@@ -153,7 +153,6 @@ export const mutations = {
 
   clearChar(state) {
     state.characteristic = JSON.parse(JSON.stringify(state.characteristicInitial))
-    console.log(state.characteristic)
   },
 
   writeValidate(state, validate) {

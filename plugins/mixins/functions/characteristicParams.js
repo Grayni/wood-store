@@ -52,7 +52,6 @@ export const characteristicParams = {
 
   },
   mounted() {
-    // send ref.validate method in child component
     this.writeValidate(this.$refs[this.referal].validate)
   }
 }
