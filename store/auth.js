@@ -101,22 +101,15 @@ export const actions = {
 
 
 export const mutations = {
-  setToken(state, token) {
-    state.token = token
-  },
+  setToken: (state, token) => state.token = token,
 
-  clearToken(state) {
-    state.token = null
-  },
+  clearToken: state => state.token = null,
 
-  fetchUsersList(state, users) {
-    state.users = users
-  },
+  fetchUsersList: (state, users) => state.users = users,
 
-  removeUser(state, id) {
-    state.users = state.users.filter(x=> x._id !== id)
-  },
+  removeUser: (state, id) => state.users = state.users.filter(x=> x._id !== id),
 
+  cleanUserFields: state => state.user = JSON.parse(JSON.stringify(userEmpty)),
 
   // add
   addSurname: (state, surname) => state.user.surname = surname,
@@ -128,9 +121,8 @@ export const mutations = {
   addPhone: (state, phone) => state.user.phone = phone,
   addAdress: (state, adress) => state.user.adress = adress,
   addBirthday: (state, birthday) => state.user.birthday = birthday,
-  addStatus: (state, status) => state.user.status = status,
+  addStatus: (state, status) => state.user.status = status
 
-  cleanUserFields: state => state.user = JSON.parse(JSON.stringify(userEmpty))
 }
 
 
@@ -150,9 +142,7 @@ export const getters = {
 
 
 function isJWTValid(token) {
-  if (!token) {
-    return false
-  }
+  if (!token) return
 
   const jwtData = jwtDecode(token) || {}
   const expires = jwtData.exp || 0
