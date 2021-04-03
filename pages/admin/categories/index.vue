@@ -1,6 +1,6 @@
 <template lang="pug">
   .categories
-    h2.admin-title Таблица категорий
+    h1.admin-title Таблица категорий
     .table-box-wrapper
       el-table.table-box(
         :data="categories.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"

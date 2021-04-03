@@ -7,7 +7,7 @@ export const validateForm = {
 
       if (value === '') {
         callback(new Error('Пожалуйста, введите пароль еще раз'))
-      } else if (value !== this.controls.pass) {
+      } else if (value !== this.user.pass) {
         callback(new Error('Пароли не совпадают!'))
       } else {
         callback()
@@ -17,7 +17,7 @@ export const validateForm = {
     const validatePassOld = async (rule, value, callback) => {
       // for checked use oldpass and id-user
       const validate = {
-        pass: this.controls.oldpass,
+        pass: this.user.oldpass,
         id: this.$route.params.id
       }
 
@@ -29,7 +29,7 @@ export const validateForm = {
     }
 
     const validatePassNew = async (rule, value, callback) => {
-      if(this.controls.oldpass.length === 0 && this.controls.newpass.length) {
+      if(this.user.oldpass.length === 0 && this.controls.newpass.length) {
         callback(new Error(rule.message))
       }
     }

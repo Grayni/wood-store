@@ -1,7 +1,7 @@
 export const statusLabel = {
   data() {
     return {
-      options: [
+      mixOptions: [
         {
           label: 'Администратор',
           value: 'admin'

@@ -1,6 +1,6 @@
 <template lang="pug">
   .users-list
-    h2.admin-title Список пользователей
+    h1.admin-title Список пользователей
     .table-box-wrapper
       el-table.table-box(:data="users" :default-sort="{prop: 'date', order: 'descending'}")
         el-table-column(type="index" label="№" width="50")
@@ -13,7 +13,7 @@
 
         el-table-column(label="Статус" prop="status" sortable width="183")
           template(v-slot:default="{row: {status}}")
-            | {{ showStatus(options, status) }}
+            | {{ showStatus(mixOptions, status) }}
 
         el-table-column(label="Действия" width="152")
           template(slot-scope="{row}")

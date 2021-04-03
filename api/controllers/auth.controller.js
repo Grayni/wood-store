@@ -50,7 +50,7 @@ module.exports.createUser = async (req, res) => {
     })
 
     await user.save()
-    res.status(201).json(user)
+    res.status(201).json('Пользователь создан.')
 }
 
 module.exports.updateUser = async (req, res) => {

@@ -4,8 +4,22 @@ import jwtDecode from 'jwt-decode'
 
 export const state = () => ({
   token: null,
-  users: []
+  users: [],
+  user: {
+    surname: '',
+    name: '',
+    email: '',
+    login: '',
+    pass: '',
+    passrep: '',
+    phone: '',
+    adress: '',
+    birthday: '',
+    status: ''
+  }
 })
+
+let userEmpty = JSON.parse(JSON.stringify(state().user))
 
 export const actions = {
   async fetchUsersList({commit}) {
@@ -29,9 +43,10 @@ export const actions = {
     }
   },
 
-  async createUser({commit}, formData) {
+  async createUser({commit}, user) {
     try {
-      await this.$axios.$post('/api/auth/admin/create-user', formData)
+      const response = await this.$axios.$post('/api/auth/admin/create-user', user)
+      return response
     } catch (e) {
       commit('setError', e, { root: true })
       throw e
@@ -84,6 +99,7 @@ export const actions = {
   }
 }
 
+
 export const mutations = {
   setToken(state, token) {
     state.token = token
@@ -99,14 +115,39 @@ export const mutations = {
 
   removeUser(state, id) {
     state.users = state.users.filter(x=> x._id !== id)
-  }
+  },
+
+
+  // add
+  addSurname: (state, surname) => state.user.surname = surname,
+  addName: (state, name) => state.user.name = name,
+  addEmail: (state, email) => state.user.email = email,
+  addLogin: (state, login) => state.user.login = login,
+  addPass: (state, pass) => state.user.pass = pass,
+  addPassrep: (state, passrep) => state.user.passrep = passrep,
+  addPhone: (state, phone) => state.user.phone = phone,
+  addAdress: (state, adress) => state.user.adress = adress,
+  addBirthday: (state, birthday) => state.user.birthday = birthday,
+  addStatus: (state, status) => state.user.status = status,
+
+  cleanUserFields: state => state.user = JSON.parse(JSON.stringify(userEmpty))
 }
+
 
 export const getters = {
   isAuthenticated: state => Boolean(state.token),
+
   token: state => state.token,
-  users: state => state.users
+  
+  users: state => state.users,
+  
+  user: state => state.user
 }
+
+
+
+
+
 
 function isJWTValid(token) {
   if (!token) {

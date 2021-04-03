@@ -148,7 +148,7 @@ export const actions = {
 }
 
 export const mutations = {
-  fetchList(state, categories) { // +
+  fetchList: (state, categories) => { // +
     state.categories = categories
   },
 
@@ -215,35 +215,17 @@ export const mutations = {
 
 export const getters = {
 
-  firstborns(state) { // +
-    return state.firstborns
-  },
+  firstborns: state => state.firstborns, // +
 
-  categories(state) {
-    return state.categories
-  },
+  categories: state => state.categories, // +
 
-  category(state) { // +
-    return state.category
-  },
+  category: state => state.category, // +
 
-  categoryInitial(state) {
-    return state.categoryInitial
-  },
+  categoryInitial: state => state.categoryInitial, // +
 
-  categoryEmpty(state) {
-    return state.categoryEmpty
-  },
+  childrens: state => state.childrens, // +
 
-  childrens(state) {
-    return state.childrens
-  },
+  subcategoriesList: state => state.subcategories, // !+
 
-  subcategoriesList(state) {
-    return state.subcategories
-  },
-
-  loading(state) {
-    return state.loading
-  }
+  loading: state => state.loading // +
 }

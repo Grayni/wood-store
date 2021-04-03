@@ -23,7 +23,7 @@
 
     el-menu-item(index="/admin/users")
       i.el-icon-user
-      span Список пользователей
+      span Пользователи
 
     el-menu-item(index="/admin/categories")
       i.el-icon-finished
