@@ -44,3 +44,15 @@ module.exports.checkIdentifier = async (req, res) => {
     res.status(500).json(e)
   }
 }
+
+module.exports.uniqueOthers = async(req, res) => {
+  try {
+    // if exist coincidence with myself
+    const isExistValue = await User.findOne({[req.body.field]: req.body.value, _id: {$ne : req.body.id} })
+
+    const response = isExistValue ? true : false
+    res.status(200).json(response)
+  } catch (e) {
+    res.status(500).json(e)
+  }
+}

@@ -23,3 +23,9 @@ router.post(
   passport.authenticate('jwt', {session: false}),
   controller.checkIdentifier
 )
+
+router.post(
+  '/uniqueOthers',
+  passport.authenticate('jwt', {session: false}),
+  controller.uniqueOthers
+)

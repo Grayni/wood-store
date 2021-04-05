@@ -10,29 +10,29 @@
     )
 
       el-form-item(label="Фамилия" prop="surname")
-        el-input(:value="user.surname" @input="addSurname" placeholder="Ваша фамилия" size="small")
+        el-input(:value="user.surname" @input="changeSurname" placeholder="Ваша фамилия" size="small")
 
       el-form-item(label="Имя" prop="name")
-        el-input(:value="user.name" @input="addName" placeholder="Ваше имя" size="small")
+        el-input(:value="user.name" @input="changeName" placeholder="Ваше имя" size="small")
 
       el-form-item(label="Email" prop="email")
-        el-input(:value="user.email" @input="addEmail" type="email" size="small")
+        el-input(:value="user.email" @input="changeEmail" type="email" size="small")
 
       el-form-item(label="Логин пользователя" prop="login")
-        el-input(:value="user.login" @input="addLogin" placeholder="Необязательно" size="small")
+        el-input(:value="user.login" @input="changeLogin" placeholder="Необязательно" size="small")
 
       br
 
       el-form-item(label="Пароль пользователя" prop="pass")
-        el-input(:value="user.pass" @input="addPass" type="password" show-password size="small")
+        el-input(:value="user.pass" @input="changePass" type="password" show-password size="small")
 
       el-form-item(label="Повторить пароль" prop="passrep" status-icon)
-        el-input(:value="user.passrep" @input="addPassrep" type="password" show-password size="small")
+        el-input(:value="user.passrep" @input="changePassrep" type="password" show-password size="small")
 
       br
 
       el-form-item(label="Номер телефона" prop="phone")
-        el-input(:value="user.phone" @input="addPhone" type="phone" v-mask="'+7 (###) ###-##-##'" size="small")
+        el-input(:value="user.phone" @input="changePhone" type="phone" v-mask="'+7 (###) ###-##-##'" size="small")
 
       el-form-item(label="Адрес доставки" prop="adress")
         el-input(
@@ -40,15 +40,15 @@
           :rows="2"
           placeholder="Введите адрес доставки"
           :value="user.adress"
-          @input="addAdress"
+          @input="changeAdress"
           size="mini"
         )
 
       el-form-item.birthday(label="День рождения" prop="birthday")
-        el-date-picker(:value="user.birthday" @input="addBirthday" type="date" size="small" placeholder="Выбрать дату")
+        el-date-picker(:value="user.birthday" @input="changeBirthday" type="date" size="small" placeholder="Выбрать дату")
 
       el-form-item(label="Статус пользователя", prop="status")
-        el-select(:value="user.status" @input="addStatus" placeholder="Выбрать статус пользователя" size="small")
+        el-select(:value="user.status" @input="changeStatus" placeholder="Выбрать статус пользователя" size="small")
           el-option(
             v-for="item in mixOptions"
             :key="item.value"
@@ -56,7 +56,7 @@
             :value="item.value"
           )
 
-      el-form-item.button-wrap.create-user
+      el-form-item.button-wrap.button-right
         el-button(type="primary" native-type="submit" :loading="loading")
           span.text-button Создать
 
@@ -97,17 +97,18 @@ export default {
   methods: {
     ...mapActions('auth', ['createUser']),
     ...mapMutations('auth', [
-      'addSurname',
-      'addName',
-      'addEmail',
-      'addLogin',
-      'addPass',
-      'addPassrep',
-      'addPhone',
-      'addAdress',
-      'addBirthday',
-      'addStatus',
-      'cleanUserFields'
+      'changeSurname',
+      'changeName',
+      'changeEmail',
+      'changeLogin',
+      'changePass',
+      'changePassrep',
+      'changePhone',
+      'changeAdress',
+      'changeBirthday',
+      'changeaddStatus',
+      'cleanUserFields',
+      'changeStatus'
     ]),
 
     onSubmit(formName) {
@@ -132,7 +133,4 @@ export default {
 </script>
 
 <style lang="stylus">
-  .button-wrap.create-user
-    justify-content flex-end
-    margin-top 20px
 </style>

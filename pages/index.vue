@@ -32,12 +32,12 @@ export default {
 
     }
   },
-  async asyncData({store}) {
-    const data = await store.dispatch('characteristics/getCharacterContent')
-    const imprint = JSON.stringify(data)
+  // async asyncData({store}) {
+  //   const data = await store.dispatch('characteristics/getCharacter')
+  //   const imprint = JSON.stringify(data)
 
-    return {imprint}
-  }
+  //   return {imprint}
+  // }
 }
 </script>
 

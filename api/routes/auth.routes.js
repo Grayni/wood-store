@@ -27,4 +27,17 @@ router.put(
   controller.updateUser
 )
 
+// /api/auth/admin/id
+router.delete(
+  '/admin/:id',
+  passport.authenticate('jwt', {session: false}),
+  controller.remove
+)
+
+router.get(
+  '/admin/:id',
+  passport.authenticate('jwt', {session: false}),
+  controller.fetchUserById
+)
+
 module.exports = router

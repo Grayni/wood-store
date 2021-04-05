@@ -19,19 +19,18 @@ export const actions = {
     }
   },
 
-  async checkOldPass ({commit}, payload) {
-    try {
-      return await this.$axios.$post('/api/validate/check-pass', payload)
-    } catch (e) {
-      commit('setError', e, {root: true})
-      throw e
-    }
-  },
-
   async checkIdentifier ({commit}, {section, value}) {
     try {
       return await this.$axios.$post(`/api/validate/unique-identifier/${section}`, {value})
     } catch (e) {
+      commit('setError', e, {root: true})
+    }
+  },
+
+  async checkValue({commit}, formData) {
+    try {
+      return this.$axios.$post('/api/validate/uniqueOthers', formData)
+    } catch(e) {
       commit('setError', e, {root: true})
     }
   }

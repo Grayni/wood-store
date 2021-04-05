@@ -8,7 +8,6 @@ const passportStrategy = require('./middleware/passport-strategy')
 const categoriesRoutes = require('./routes/categories.routes')
 const authRoutes = require('./routes/auth.routes')
 const validateRoutes = require('./routes/validate.routes')
-const usersRoutes = require('./routes/users.routes')
 const characterRoutes = require('./routes/characteristics.routes')
 
 const keys = require('./keys/index.js')
@@ -38,7 +37,6 @@ app.disable('x-powered-by')
   app.use('/api/categories', categoriesRoutes)
   app.use('/api/auth', authRoutes)
   app.use('/api/validate', validateRoutes)
-  app.use('/api/users', usersRoutes)
   app.use('/api/characteristics', characterRoutes)
 
 module.exports = { handler: app }

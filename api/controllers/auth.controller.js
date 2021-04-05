@@ -65,6 +65,25 @@ module.exports.updateUser = async (req, res) => {
 
   try {
     const user = await User.findOneAndUpdate({_id: req.params.id}, {$set}, {new: true})
+    res.status(200).json('Данные пользователя обновлены.')
+  } catch(e) {
+    res.status(500).json(e)
+  }
+}
+
+module.exports.remove = async (req, res) => {
+  try {
+    await User.deleteOne({_id: req.params.id})
+    res.status(200).json({message: 'Пользователь удален!'})
+  } catch(e) {
+    res.status(500).json(e)
+  }
+}
+
+module.exports.fetchUserById = async (req, res) => {
+  try {
+    const user = await User.findOne({_id: req.params.id}, {pass: 0, __v: 0})
+    user.pass = ''
     res.status(200).json(user)
   } catch(e) {
     res.status(500).json(e)

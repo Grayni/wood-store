@@ -3,6 +3,7 @@ export const validateForm = {
   
   data() {
 
+    // repeat check password
     const validatePassRepeat = (rule, value, callback) => {
 
       if (value === '') {
@@ -11,26 +12,6 @@ export const validateForm = {
         callback(new Error('Пароли не совпадают!'))
       } else {
         callback()
-      }
-    }
-
-    const validatePassOld = async (rule, value, callback) => {
-      // for checked use oldpass and id-user
-      const validate = {
-        pass: this.user.oldpass,
-        id: this.$route.params.id
-      }
-
-      const check = await this.$store.dispatch('validate/checkOldPass', validate)
-
-      if (!check && value.length !== 0) {
-        callback(new Error(rule.message))
-      }
-    }
-
-    const validatePassNew = async (rule, value, callback) => {
-      if(this.user.oldpass.length === 0 && this.controls.newpass.length) {
-        callback(new Error(rule.message))
       }
     }
 
@@ -227,22 +208,14 @@ export const validateForm = {
             min: 6, message: 'Длина пароля должна быть не меньше 6 символов', trigger: 'blur'
           }
         ],
-        passrep: [
+        passrep: [ // repeat password from create user // +
           {
             validator: validatePassRepeat, message: 'Введите правильный старый пароль', trigger: 'blur',
           }
         ],
-        oldpass: [
+        repass: [
           {
-            validator: validatePassOld, message: 'Введите правильный старый пароль', trigger: 'blur'
-          }
-        ],
-        newpass: [
-          {
-            required: false, validator: validatePassNew, message: 'Введите сначала правильный старый пароль', trigger: 'blur'
-          },
-          {
-            min: 6, message: 'Длина пароля должна быть не меньше 6 символов', trigger: 'blur'
+            required: true, min: 6, message: 'Длина пароля должна быть не меньше 6 символов', trigger: 'blur'
           }
         ],
         article: [

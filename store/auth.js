@@ -53,6 +53,17 @@ export const actions = {
     }
   },
 
+  async fetchUserById({commit}, id) {
+    try {
+      const response = await this.$axios.$get(`/api/auth/admin/${id}`)
+      commit('fetchUserById', response)
+      return
+    } catch (e) {
+      commit('setError', e, {root: true})
+      throw e
+    }
+  },
+
   setToken({commit}, token) {
     this.$axios.setToken(token, 'Bearer')
     commit('setToken', token)
@@ -79,9 +90,9 @@ export const actions = {
     }
   },
 
-  async updateUser({commit}, formData) {
+  async updateUser({commit}, user) {
     try {
-      return await this.$axios.$put(`/api/auth/admin/update-users/${formData.id}`, formData)
+      return await this.$axios.$put(`/api/auth/admin/update-users/${user._id}`, user)
     } catch(e) {
       commit('setError', e, {root: true})
       throw e
@@ -91,7 +102,7 @@ export const actions = {
   async removeUser({commit}, id) {
     try {
       commit('removeUser', id)
-      return await this.$axios.$delete(`/api/users/admin/${id}`)
+      return await this.$axios.$delete(`/api/auth/admin/${id}`)
     } catch(e) {
       commit('setError', e, {root: true})
       throw e
@@ -111,18 +122,19 @@ export const mutations = {
 
   cleanUserFields: state => state.user = JSON.parse(JSON.stringify(userEmpty)),
 
-  // add
-  addSurname: (state, surname) => state.user.surname = surname,
-  addName: (state, name) => state.user.name = name,
-  addEmail: (state, email) => state.user.email = email,
-  addLogin: (state, login) => state.user.login = login,
-  addPass: (state, pass) => state.user.pass = pass,
-  addPassrep: (state, passrep) => state.user.passrep = passrep,
-  addPhone: (state, phone) => state.user.phone = phone,
-  addAdress: (state, adress) => state.user.adress = adress,
-  addBirthday: (state, birthday) => state.user.birthday = birthday,
-  addStatus: (state, status) => state.user.status = status
+  fetchUserById: (state, user) => state.user = state.user = user,
 
+  // add
+  changeSurname: (state, surname) => state.user.surname = surname,
+  changeName: (state, name) => state.user.name = name,
+  changeEmail: (state, email) => state.user.email = email,
+  changeLogin: (state, login) => state.user.login = login,
+  changePass: (state, pass) => state.user.pass = pass,
+  changePassrep: (state, passrep) => state.user.passrep = passrep,
+  changePhone: (state, phone) => state.user.phone = phone,
+  changeAdress: (state, adress) => state.user.adress = adress,
+  changeBirthday: (state, birthday) => state.user.birthday = birthday,
+  changeStatus: (state, status) => state.user.status = status
 }
 
 
