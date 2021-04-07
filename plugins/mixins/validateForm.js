@@ -38,6 +38,8 @@ export const validateForm = {
       if (section === 'categories') // if value not change
         if (this.$route.params.identifier === value) return callback()
 
+      if (section === 'products') return /// !!!!!!!!!!!!
+
       const unique = await this.$store.dispatch('validate/checkIdentifier', {value, section})
 
       unique ? callback(new Error(rule.message)) : callback()
@@ -314,8 +316,8 @@ export const validateForm = {
           },
           {
             required: true,
-            pattern: /^([a-zA-Z]+[a-zA-Z_\-]*)$/gi,
-            message: 'Только латиница и без пробелов; Первый символ -> Буква',
+            pattern: /^([a-zA-Z]+[a-zA-Z0-9_\-]*)$/gi,
+            message: 'Только латиница, цифры и без пробелов; Первый символ -> Буква',
             trigger: 'blur'
           },
           {

@@ -1,52 +1,52 @@
 <template lang="pug">
   .redact-create.products
-    el-page-header.header-page(@back="$router.push('/admin/products')" :title="'Таблица товаров'.toUpperCase()" :content="this.meta.title")
+    h1.admin-title Таблица товаров
 
-    el-form.block(:model="controls" :rules="rules" label-position="right" size="small")
+    el-form.block(:model="product" :rules="rules" label-position="right" size="small")
       .container-1
         el-form-item(label="Название товара" prop="title")
-          el-input(v-model="controls.title" placeholder="Полное название товара")
+          el-input(:value="product.title" @input="changeTitle" placeholder="Полное название товара")
         
-        el-form-item.name-service.mb(label="Название тега" prop="tag")
-          el-input( v-model="controls.tag" placeholder="Название товара на латинице, слитно")
+        el-form-item.name-service.mb(label="Название тега" prop="identifier")
+          el-input( :value="product.identifier" @input="changeIdentifier" placeholder="Название товара на латинице, слитно")
 
-        .wrap-duble
-          el-form-item(label="Категория товара" prop="category")
-            selector-category
+        //- .wrap-duble
+        //-   el-form-item(label="Категория товара" prop="category")
+        //-     selector-category
 
-          .rate-wrap
-            el-form-item.rate(label="Рейтинг товара")
-              el-rate(v-model="controls.rate")
+        //-   .rate-wrap
+        //-     el-form-item.rate(label="Рейтинг товара")
+        //-       el-rate(v-model="product.rate")
 
 
-        el-form-item(label="Oписание товара" prop="description")
-          el-input(type="textarea" v-model="controls.description" :autosize="{minRows: 4}" placeholder="Ввести описание для SEO")
+        //- el-form-item(label="Oписание товара" prop="description")
+        //-   el-input(type="textarea" v-model="product.description" :autosize="{minRows: 4}" placeholder="Ввести описание для SEO")
 
-        .wrap-duble
-          el-form-item(label="Цена" prop="price")
-            el-input-number(v-model="controls.price" :min="0" :max="200000" :controls="false" )
+        //- .wrap-duble
+        //-   el-form-item(label="Цена" prop="price")
+        //-     el-input-number(v-model="product.price" :min="0" :max="200000" :product="false" )
 
-          el-form-item(label="Скидка %" prop="sale")
-            el-input-number(v-model="controls.sale" :min="0" :max="50" :controls="false")
+        //-   el-form-item(label="Скидка %" prop="sale")
+        //-     el-input-number(v-model="product.sale" :min="0" :max="50" :product="false")
 
-        .wrap-duble
-          el-form-item(label="Количество товара (Для админа)" prop="amount")
-            el-input-number(v-model="controls.amount" :min="0" :max="50" :controls="false")
+        //- .wrap-duble
+        //-   el-form-item(label="Количество товара (Для админа)" prop="amount")
+        //-     el-input-number(v-model="product.amount" :min="0" :max="50" :product="false")
 
-          el-form-item(label="Статус товара (для клиента)" prop="availability")
-            el-select(v-model="controls.availability.label" placeholder="Выбрать статус")
-              el-option(v-for="item in availabilityList" :key="item.label" :label="item.label" :value="item.value")
+        //-   el-form-item(label="Статус товара (для клиента)" prop="availability")
+        //-     el-select(v-model="product.availability.label" placeholder="Выбрать статус")
+        //-       el-option(v-for="item in availabilityList" :key="item.label" :label="item.label" :value="item.value")
 
-        el-form-item(label="Отображение товара" prop="display")
-          el-radio-group.radio-display(v-model="controls.display")
-            el-radio-button(v-for="(status, i) in productDisplay" :key="`status-${i}`" :label="status")
+        //- el-form-item(label="Отображение товара" prop="display")
+        //-   el-radio-group.radio-display(v-model="product.display")
+        //-     el-radio-button(v-for="(status, i) in productDisplay" :key="`status-${i}`" :label="status")
 
         el-form-item(label="Добавить характеристику")
-          selector-characteristics
+          //- selector-characteristics
 
         //- .characteristics
         //-   el-form-item(v-for="(characteristic, i) in characteristicsList" :key="characteristic+i" :label="characteristic" prop="display")
-        //-     el-checkbox-group(v-model="controls.characteristics" size="mini")
+        //-     el-checkbox-group(v-model="product.characteristics" size="mini")
         //-       el-checkbox-button(v-for="(item, j) in characteristic" :label="item.title" :key="item+j" @change="selectValue") {{item}}
 
 
@@ -63,42 +63,43 @@
         br
 
         h2.mb Дополнительные опции
-        .wrap-duble
-          dimensions(:label-name="'Габариты товара (Длина х Ширина х Высота)'")
-          dimensions(:label-name="'Размер упаковки (Длина х Ширина х Высота)'")
-          weight(
-            @weight="controls.weight.value = $event"
-            @unit="controls.weight.unit = $event"
-          )
-          property-string(:label="'Артикул'")
+        //- .wrap-duble
+        //-   dimensions(:label-name="'Габариты товара (Длина х Ширина х Высота)'")
+        //-   dimensions(:label-name="'Размер упаковки (Длина х Ширина х Высота)'")
+        //-   weight(
+        //-     @weight="product.weight.value = $event"
+        //-     @unit="product.weight.unit = $event"
+        //-   )
+        //-   property-string(:label="'Артикул'")
 
       .container-2
         el-form-item.avatar-product(label="Главное изображение" placeholder="Выберите изображение")
-          el-upload(
-            class="upload-demo"
-            list-type="picture-card"
-            ref="upload"
-            action=""
-            multiple=true
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :on-change="handleChange"
-            :auto-upload="false"
-            :file-list="fileList"
-          )
-            i.el-icon-plus
+        //-   el-upload(
+        //-     class="upload-demo"
+        //-     list-type="picture-card"
+        //-     ref="upload"
+        //-     action=""
+        //-     :multiple="true"
+        //-     :on-preview="handlePreview"
+        //-     :on-remove="handleRemove"
+        //-     :on-change="handleChange"
+        //-     :auto-upload="false"
+        //-     :file-list="fileList"
+        //-   )
+        //-     i.el-icon-plus
 
-          .wrap-upload
-            el-button.upload(v-if="fileList.length" size="small" type="success" @click="submitUpload") Загрузить
+        //-   .wrap-upload
+        //-     el-button.upload(v-if="fileList.length" size="small" type="success" @click="submitUpload") Загрузить
 
-        el-dialog(:visible.sync="dialogVisible")
-          img(width="100%" :src="dialogImageUrl" alt="")
+        //- el-dialog(:visible.sync="dialogVisible")
+        //-   img(width="100%" :src="dialogImageUrl" alt="")
 
       //- el-form-item(label="Главное изображение в трех размерах")
       //- el-form-item(label="Галерея изображений товара" thumbnails)
 </template>
 
 <script>
+  import {mapGetters, mapMutations} from 'vuex'
   import {validateForm} from '@/plugins/mixins/validateForm'
   import {transliter} from '@/plugins/mixins/transliter'
 
@@ -112,44 +113,38 @@
     mixins: [validateForm, transliter],
     head() {
       return {
-        title: this.meta.title,
+        title: 'Создание документа товара',
         meta: [
           {
             hid: `description-${this.$route.name}`,
             name: 'description',
-            content: this.meta.description
+            content: 'Страница параметров и свойств для создания товара'
           }
         ]
       }
     },
     data() {
       return {
-        meta: {
-          title: 'Создание документа товара',
-          description: 'Страница параметров и свойств для создания товара'
-        },
-
         characteristicsList: [],
         characteristicValue: '',
-        controls: {
-          title: '',
-          tag: '',
-          category: '',
-          price: 0,
-          sale: 0,
-          display: 'Черновик',
-          amount: 0,
-          availability: {
-            label: 'Под заказ'
-          },
-          rate: 0,
-          description: '',
-          weight: {
-            value: 0,
-            unit: ''
-          },
-          characteristics: []
-        },
+        // product: {
+        //   title: '',
+        //   identifier: '',
+        //   price: 0,
+        //   sale: 0,
+        //   display: 'Черновик',
+        //   amount: 0,
+        //   availability: {
+        //     label: 'Под заказ'
+        //   },
+        //   rate: 0,
+        //   description: '',
+        //   weight: {
+        //     value: 0,
+        //     unit: ''
+        //   },
+        //   characteristics: []
+        // },
         availabilityList,
         productDisplay,
         fileList: [],
@@ -158,26 +153,39 @@
       }
     },
     watch: {
-      'controls.title'() {
-        this.controls.tag = this.translit(this.controls.title)
+      'product.title'() {
+        this.changeIdentifier(this.translit(this.product.title))
       }
     },
+    computed: {
+      ...mapGetters('products', [
+        'product',
+        'title'
+      ])
+    },
     methods: {
-      handlePreview(file) {this.dialogImageUrl = file.url,this.dialogVisible = true},
-      handleRemove(file, fileList) {this.fileList = fileList},
-      handleChange(file, fileList) {this.fileList = fileList},
-      submitUpload(file) {this.$refs.upload.submit()},
-      getParam(event, variable) {variable = event},
+      ...mapMutations('products', [
+        'changeTitle',
+        'changeIdentifier'
+      ])
+      // handlePreview(file) {this.dialogImageUrl = file.url, this.dialogVisible = true},
+      // handleRemove(file, fileList) {this.fileList = fileList},
+      // handleChange(file, fileList) {this.fileList = fileList},
+      // submitUpload(file) {this.$refs.upload.submit()},
+      // getParam(event, variable) {variable = event},
 
-      addCharacteristic() {
-        this.characteristicsList.push(this.characteristicValue)
-      },
-      selectValue() {
-        console.log(this.controls.characteristics)
-      },
-      assignment(value) {
-        console.log(value)
-      }
+      // addCharacteristic() {
+      //   this.characteristicsList.push(this.characteristicValue)
+      // },
+      // selectValue() {
+      //   console.log(this.product.characteristics)
+      // },
+      // assignment(value) {
+      //   console.log(value)
+      // }
+    },
+    async created() {
+      console.log(this.product)
     }
   }
 </script>
