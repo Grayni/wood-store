@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-select(v-model="category" @change="senderCategory" placeholder="Выбор категории")
+  el-select(:value="category" @change="changeCategory" placeholder="Выбор категории")
     el-option-group(
       v-for="group in subcategoriesList"
       :key="group.label"
@@ -14,20 +14,16 @@
 </template>
 
 <script>
-  import {mapGetters, mapActions} from 'vuex'
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
   export default {
     name: 'selector-category',
-    data() {
-      return {
-        category: ''
-      }
-    },
     computed: {
-      ...mapGetters('categories', ['subcategoriesList'])
+      ...mapGetters('categories', ['subcategoriesList']),
+      ...mapGetters('products', ['category'])
     },
     methods: {
       ...mapActions('categories', ['fetchSubcategoriesList']),
-      senderCategory() {}
+      ...mapMutations('products', ['changeCategory']),
     },
     async created() {
       this.fetchSubcategoriesList()

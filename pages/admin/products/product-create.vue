@@ -10,13 +10,13 @@
         el-form-item.name-service.mb(label="Название тега" prop="identifier")
           el-input( :value="product.identifier" @input="changeIdentifier" placeholder="Название товара на латинице, слитно")
 
-        //- .wrap-duble
-        //-   el-form-item(label="Категория товара" prop="category")
-        //-     selector-category
+        .wrap-duble
+          el-form-item(label="Категория товара" prop="category")
+            selector-category
 
-        //-   .rate-wrap
-        //-     el-form-item.rate(label="Рейтинг товара")
-        //-       el-rate(v-model="product.rate")
+          .rate-wrap
+            el-form-item.rate(label="Рейтинг товара")
+              el-rate(:value="product.rate" @input="changeRate")
 
 
         //- el-form-item(label="Oписание товара" prop="description")
@@ -127,24 +127,6 @@
       return {
         characteristicsList: [],
         characteristicValue: '',
-        // product: {
-        //   title: '',
-        //   identifier: '',
-        //   price: 0,
-        //   sale: 0,
-        //   display: 'Черновик',
-        //   amount: 0,
-        //   availability: {
-        //     label: 'Под заказ'
-        //   },
-        //   rate: 0,
-        //   description: '',
-        //   weight: {
-        //     value: 0,
-        //     unit: ''
-        //   },
-        //   characteristics: []
-        // },
         availabilityList,
         productDisplay,
         fileList: [],
@@ -160,13 +142,15 @@
     computed: {
       ...mapGetters('products', [
         'product',
-        'title'
+        'title',
+        'rate'
       ])
     },
     methods: {
       ...mapMutations('products', [
         'changeTitle',
-        'changeIdentifier'
+        'changeIdentifier',
+        'changeRate'
       ])
       // handlePreview(file) {this.dialogImageUrl = file.url, this.dialogVisible = true},
       // handleRemove(file, fileList) {this.fileList = fileList},
@@ -185,7 +169,6 @@
       // }
     },
     async created() {
-      console.log(this.product)
     }
   }
 </script>

@@ -1,6 +1,6 @@
 export const state = () => ({
   product: {
-    title: 'test',
+    title: '',
     identifier: '',
     category: {
       value: '',
@@ -29,11 +29,17 @@ export const state = () => ({
   }
 })
 
+const productInit = JSON.parse(JSON.stringify(state().product))
+
 export const mutations = {
   changeTitle: (state, title) => state.product.title = title,
-  changeIdentifier: (state, identifier) => state.product.identifier = identifier
+  changeIdentifier: (state, identifier) => state.product.identifier = identifier,
+  changeCategory: (state, category) => state.product.category = category,
+  changeRate: (state, rate) => state.product.rate = rate
 }
 
 export const getters = {
-  product: state => state.product
+  product: state => state.product,
+  category: state => state.product.category,
+  rate: state => state.product.rate
 }
