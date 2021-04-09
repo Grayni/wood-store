@@ -23,7 +23,7 @@
     },
     methods: {
       ...mapActions('categories', ['fetchSubcategoriesList']),
-      ...mapMutations('products', ['changeCategory']),
+      ...mapMutations('products', ['changeCategory'])
     },
     async created() {
       this.fetchSubcategoriesList()

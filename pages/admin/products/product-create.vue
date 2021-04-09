@@ -18,28 +18,28 @@
             el-form-item.rate(label="Рейтинг товара")
               el-rate(:value="product.rate" @input="changeRate")
 
+        el-form-item(label="Oписание товара" prop="description")
+          el-input(type="textarea" :value="product.description" @input="changeDescription" :autosize="{minRows: 4}" placeholder="Ввести описание для SEO")
+          div(v-if="product.description.length") {{product.description.length}} знаков
 
-        //- el-form-item(label="Oписание товара" prop="description")
-        //-   el-input(type="textarea" v-model="product.description" :autosize="{minRows: 4}" placeholder="Ввести описание для SEO")
+        .wrap-duble
+          el-form-item(label="Цена" prop="price")
+            el-input-number(:value="product.price" @input="changePrice" :min="0" :max="200000" :product="false" )
 
-        //- .wrap-duble
-        //-   el-form-item(label="Цена" prop="price")
-        //-     el-input-number(v-model="product.price" :min="0" :max="200000" :product="false" )
+          el-form-item(label="Скидка %" prop="sale")
+            el-input-number(:value="product.sale" @input="changeSale" :min="0" :max="50" :product="false")
 
-        //-   el-form-item(label="Скидка %" prop="sale")
-        //-     el-input-number(v-model="product.sale" :min="0" :max="50" :product="false")
+        .wrap-duble
+          el-form-item(label="Количество товара (Для админа)" prop="amount")
+            el-input-number(:value="product.amount" @input="changeAmount" :min="0" :max="50" :product="false")
 
-        //- .wrap-duble
-        //-   el-form-item(label="Количество товара (Для админа)" prop="amount")
-        //-     el-input-number(v-model="product.amount" :min="0" :max="50" :product="false")
+          el-form-item(label="Статус товара (для клиента)" prop="availability")
+            el-select(:value="availabilityValue" @change="changeAvailability" placeholder="Выбрать статус")
+              el-option(v-for="item in availabilityList" :key="item.label" :label="item.label" :value="item.value")
 
-        //-   el-form-item(label="Статус товара (для клиента)" prop="availability")
-        //-     el-select(v-model="product.availability.label" placeholder="Выбрать статус")
-        //-       el-option(v-for="item in availabilityList" :key="item.label" :label="item.label" :value="item.value")
-
-        //- el-form-item(label="Отображение товара" prop="display")
-        //-   el-radio-group.radio-display(v-model="product.display")
-        //-     el-radio-button(v-for="(status, i) in productDisplay" :key="`status-${i}`" :label="status")
+        el-form-item(label="Отображение товара" prop="display")
+          el-radio-group.radio-display(:value="product.display" @change="changeDisplay")
+            el-radio-button(v-for="(status, i) in productDisplay" :key="`status-${i}`" :label="status")
 
         el-form-item(label="Добавить характеристику")
           //- selector-characteristics
@@ -142,15 +142,20 @@
     computed: {
       ...mapGetters('products', [
         'product',
-        'title',
-        'rate'
+        'availabilityValue'
       ])
     },
     methods: {
       ...mapMutations('products', [
         'changeTitle',
         'changeIdentifier',
-        'changeRate'
+        'changeRate',
+        'changeDescription',
+        'changePrice',
+        'changeSale',
+        'changeAmount',
+        'changeAvailability',
+        'changeDisplay'
       ])
       // handlePreview(file) {this.dialogImageUrl = file.url, this.dialogVisible = true},
       // handleRemove(file, fileList) {this.fileList = fileList},
